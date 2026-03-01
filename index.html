@@ -62,7 +62,7 @@
 </head>
 <body>
     <h1>Look it up, asshat.</h1>
-    <form action="https://www.google.com/search" method="get" autocomplete="off" target="_blank">
+    <form action="https://www.google.com/search" method="get" autocomplete="off">
         <input type="search" name="q" autocomplete="off" placeholder="Search Online...">
         <button type="submit">
             <img src="https://upload.wikimedia.org/wikipedia/commons/5/55/Magnifying_glass_icon.svg" alt="Search">
@@ -84,5 +84,20 @@
     <path d="M12 12a2 2 0 1 0-2-2"></path>
   </svg>
     </a>
+    <script>
+  const form = document.querySelector("form");
+  const input = form.querySelector("input[name='q']");
+  const heading = document.querySelector("h1");
+
+  form.addEventListener("submit", (e) => {
+    const query = input.value.toLowerCase().trim();
+    const hostname = window.location.hostname.toLowerCase();
+     
+     if (query.includes(hostname) || query.includes("look it up asshat")) {
+      e.preventDefault(); 
+      heading.textContent = "you're already on the website, asshat.";
+    }
+  });
+    </script>
 </body>
 </html>
