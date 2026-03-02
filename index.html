@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Look it up</title>
+    <title>Look it up, asshat</title>
     <link rel="icon" type="image/png" href="LIUAicon.png">
     <style>
         body {
@@ -85,19 +85,49 @@
   </svg>
     </a>
     <script>
-  const form = document.querySelector("form");
-  const input = form.querySelector("input[name='q']");
-  const heading = document.querySelector("h1");
+const form = document.querySelector("form");
+const input = form.querySelector("input[name='q']");
+const heading = document.querySelector("h1");
 
-  form.addEventListener("submit", (e) => {
+const params = new URLSearchParams(window.location.search);
+const friend = params.get('friend');
+if (friend) {
+    heading.textContent = `Look it up, ${decodeURIComponent(friend)}.`;
+}
+
+// Variations that trigger the "already on the website" message
+const triggers = [
+    "look it up asshat",
+    "look it up, asshat
+    "lookitupasshat",
+    "look it up asshat website",
+    "lookitupasshat.com",
+];
+
+form.addEventListener("submit", (e) => {
     const query = input.value.toLowerCase().trim();
     const hostname = window.location.hostname.toLowerCase();
-     
-     if (query.includes(hostname) || query.includes("look it up asshat")) {
-      e.preventDefault(); 
-      heading.textContent = "you're already on the website, asshat.";
+
+    const isTrigger = triggers.some(trigger => query.includes(trigger) || query.includes(hostname));
+    if (isTrigger) {
+        e.preventDefault();
+        heading.textContent = "you're already on the website, asshat.";
     }
-  });
+});
+
+const konamiCode = [38,38,40,40,37,39,37,39,66,65];
+let konamiIndex = 0;
+
+document.addEventListener('keydown', (e) => {
+    if (e.keyCode === konamiCode[konamiIndex]) {
+        konamiIndex++;
+        if (konamiIndex === konamiCode.length) {
+            window.location.href = '/surprise/';
+        }
+    } else {
+        konamiIndex = 0;
+    }
+});
     </script>
 </body>
 </html>
