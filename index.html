@@ -95,13 +95,11 @@ if (friend) {
     heading.textContent = `Look it up, ${decodeURIComponent(friend)}.`;
 }
 
-// Variations that trigger the "already on the website" message
 const triggers = [
     "look it up asshat",
-    "look it up, asshat
     "lookitupasshat",
-    "look it up asshat website",
-    "lookitupasshat.com",
+    "look it up, as i",
+    "look it up as i"
 ];
 
 form.addEventListener("submit", (e) => {
@@ -118,11 +116,20 @@ form.addEventListener("submit", (e) => {
 const konamiCode = [38,38,40,40,37,39,37,39,66,65,13];
 let konamiIndex = 0;
 
+const beepSound = new Audio('/sounds/select.wav');
+const victorySound = new Audio('/sounds/victory.wav');
+
 document.addEventListener('keydown', (e) => {
     if (e.keyCode === konamiCode[konamiIndex]) {
+        beepSound.currentTime = 0;
+        beepSound.play();
         konamiIndex++;
+
         if (konamiIndex === konamiCode.length) {
-            window.location.href = '/surprise/';
+            victorySound.play();
+            setTimeout(() => {
+                window.location.href = '/surprise/';
+            }, 800);
         }
     } else {
         konamiIndex = 0;
