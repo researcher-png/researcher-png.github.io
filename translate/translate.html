@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Translate it, asshat</title>
+    <link rel="icon" type="image/png" href="../LIUAicon.png">
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: center;
+            min-height: 100vh;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            background-color: #fff;
+            padding-top: 60px;
+            box-sizing: border-box;
+        }
+
+        h1 {
+            font-size: 4rem;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .translate-box {
+            display: flex;
+            gap: 0;
+            width: 700px;
+            max-width: 95vw;
+            border: 1px solid #dcdcdc;
+            border-radius: 24px;
+            box-shadow: 0 1px 6px rgba(32,33,36,.28);
+            background-color: #fff;
+            overflow: hidden;
+        }
+
+        .lang-panel {
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+        }
+
+        .lang-panel + .lang-panel {
+            border-left: 1px solid #dcdcdc;
+        }
+
+        .lang-select-row {
+            display: flex;
+            align-items: center;
+            padding: 10px 14px 6px;
+            gap: 8px;
+        }
+
+        select {
+            border: none;
+            outline: none;
+            font-family: Arial, sans-serif;
+            font-size: 0.95rem;
+            color: #444;
+            background: transparent;
+            cursor: pointer;
+            flex: 1;
+        }
+
+        textarea {
+            border: none;
+            outline: none;
+            resize: none;
+            font-family: Arial, sans-serif;
+            font-size: 1.1rem;
+            padding: 10px 14px 14px;
+            min-height: 140px;
+            background: transparent;
+            color: #111;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        textarea[readonly] {
+            color: #333;
+            background-color: #fafafa;
+        }
+
+        .divider {
+            width: 1px;
+            background: #dcdcdc;
+        }
+
+        .swap-btn-wrapper {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0 6px;
+            background: #fff;
+            border-left: 1px solid #dcdcdc;
+            border-right: 1px solid #dcdcdc;
+            cursor: pointer;
+        }
+
+        .swap-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 6px;
+            color: #888;
+            font-size: 1.2rem;
+            transition: color 0.2s;
+        }
+
+        .swap-btn:hover {
+            color: #333;
+        }
+
+        .translate-btn-row {
+            display: flex;
+            justify-content: flex-end;
+            padding: 8px 14px 14px;
+        }
+
+        .translate-btn {
+            background: #000;
+            color: #fff;
+            border: none;
+            border-radius: 20px;
+            padding: 8px 20px;
+            font-family: Arial, sans-serif;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: opacity 0.2s;
+        }
+
+        .translate-btn:hover {
+            opacity: 0.8;
+        }
+
+        .translate-btn:disabled {
+            opacity: 0.4;
+            cursor: default;
+        }
+
+        .status {
+            margin-top: 14px;
+            font-size: 0.85rem;
+            color: #999;
+            min-height: 1.2em;
+        }
+
+        /* Info button identical to main page */
+        .info-link {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 37px;
+            height: 37px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #b1b1cb;
+            text-decoration: none;
+        }
+
+        /* Back link */
+        .back-link {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            font-size: 0.85rem;
+            color: #b1b1cb;
+            text-decoration: none;
+        }
+
+        .back-link:hover {
+            color: #888;
+        }
+
+        /* Separator row inside panels */
+        .panel-divider {
+            height: 1px;
+            background: #dcdcdc;
+            margin: 0 14px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Translate it, asshat.</h1>
+
+    <div class="translate-box">
+        <!-- Source panel -->
+        <div class="lang-panel">
+            <div class="lang-select-row">
+                <select id="sourceLang">
+                    <option value="auto">Detect language</option>
+                </select>
+            </div>
+            <div class="panel-divider"></div>
+            <textarea id="sourceText" placeholder="Type something..." maxlength="5000"></textarea>
+            <div class="translate-btn-row">
+                <button class="translate-btn" id="translateBtn" onclick="doTranslate()">Translate</button>
+            </div>
+        </div>
+
+        <!-- Swap -->
+        <div class="swap-btn-wrapper" onclick="swapLangs()" title="Swap languages">
+            <button class="swap-btn">⇄</button>
+        </div>
+
+        <!-- Target panel -->
+        <div class="lang-panel">
+            <div class="lang-select-row">
+                <select id="targetLang">
+                    <option value="en">English</option>
+                </select>
+            </div>
+            <div class="panel-divider"></div>
+            <textarea id="targetText" readonly placeholder="Translation will appear here..."></textarea>
+        </div>
+    </div>
+
+    <div class="status" id="status"></div>
+<div style="margin-top: 30px; font-size: 0.95rem; color: #888;">
+    also check out <a href="https://lookitupasshat.com/" style="color: #000; font-weight: bold;">look it up, asshat</a>!
+</div>
+
+    <!-- Info button -->
+    <a href="../info/" title="Info" class="info-link">
+        <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+            style="cursor:pointer;">
+            <circle cx="12" cy="12" r="10"></circle>
+            <path d="M12 16v0"></path>
+            <path d="M12 12a2 2 0 1 0-2-2"></path>
+        </svg>
+    </a>
+
+    <script>
+        const LIBRE_API = "https://libretranslate.com";
+
+        const languages = [
+            { code: "auto", name: "Detect language" },
+            { code: "en", name: "English" },
+            { code: "fr", name: "French" },
+            { code: "es", name: "Spanish" },
+            { code: "de", name: "German" },
+            { code: "it", name: "Italian" },
+            { code: "pt", name: "Portuguese" },
+            { code: "nl", name: "Dutch" },
+            { code: "pl", name: "Polish" },
+            { code: "ru", name: "Russian" },
+            { code: "zh", name: "Chinese" },
+            { code: "ja", name: "Japanese" },
+            { code: "ko", name: "Korean" },
+            { code: "ar", name: "Arabic" },
+            { code: "hi", name: "Hindi" },
+            { code: "tr", name: "Turkish" },
+            { code: "uk", name: "Ukrainian" },
+            { code: "vi", name: "Vietnamese" },
+            { code: "sv", name: "Swedish" },
+            { code: "fi", name: "Finnish" },
+            { code: "cs", name: "Czech" },
+            { code: "ro", name: "Romanian" },
+            { code: "hu", name: "Hungarian" },
+            { code: "id", name: "Indonesian" },
+        ];
+
+        const sourceSel = document.getElementById("sourceLang");
+        const targetSel = document.getElementById("targetLang");
+
+        // Populate dropdowns
+        sourceSel.innerHTML = "";
+        targetSel.innerHTML = "";
+
+        languages.forEach(lang => {
+            const optS = document.createElement("option");
+            optS.value = lang.code;
+            optS.textContent = lang.name;
+            sourceSel.appendChild(optS);
+
+            if (lang.code !== "auto") {
+                const optT = document.createElement("option");
+                optT.value = lang.code;
+                optT.textContent = lang.name;
+                targetSel.appendChild(optT);
+            }
+        });
+
+        // Default: detect → English
+        sourceSel.value = "auto";
+        targetSel.value = "en";
+
+        function swapLangs() {
+            const srcVal = sourceSel.value;
+            const tgtVal = targetSel.value;
+
+            // Can't swap "auto"
+            if (srcVal === "auto") {
+                setStatus("Can't swap from 'Detect language', pick a source first.");
+                return;
+            }
+
+            sourceSel.value = tgtVal;
+            targetSel.value = srcVal;
+
+            // Also swap text
+            const srcText = document.getElementById("sourceText").value;
+            const tgtText = document.getElementById("targetText").value;
+            document.getElementById("sourceText").value = tgtText;
+            document.getElementById("targetText").value = srcText;
+        }
+
+        function setStatus(msg) {
+            document.getElementById("status").textContent = msg;
+        }
+
+        async function doTranslate() {
+            const text = document.getElementById("sourceText").value.trim();
+            const source = sourceSel.value;
+            const target = targetSel.value;
+            const btn = document.getElementById("translateBtn");
+            const output = document.getElementById("targetText");
+
+            if (!text) {
+                setStatus("Type something first, asshat.");
+                return;
+            }
+
+            if (source === target) {
+                setStatus("That's the same language, asshat.");
+                return;
+            }
+
+            btn.disabled = true;
+            setStatus("Translating...");
+            output.value = "";
+
+            try {
+                const res = await fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(text)}&langpair=${source === "auto" ? "autodetect" : source}|${target}`);
+
+                if (!res.ok) throw new Error(`API error ${res.status}`);
+                const data = await res.json();
+
+                if (data.responseStatus === 200) {
+    output.value = data.responseData.translatedText;
+                    setStatus("");
+                } else if (data.error) {
+                    setStatus("Error: " + data.error);
+                } else {
+                    setStatus("Something went wrong.");
+                }
+            } catch (err) {
+                setStatus("Translation failed. The API might be down, asshat.");
+                console.error(err);
+            } finally {
+                btn.disabled = false;
+            }
+        }
+
+        // Allow Ctrl+Enter to translate
+        document.getElementById("sourceText").addEventListener("keydown", (e) => {
+            if (e.key === "Enter" && e.ctrlKey) doTranslate();
+        });
+    </script>
+</body>
+</html>
