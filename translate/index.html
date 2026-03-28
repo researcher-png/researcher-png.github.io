@@ -185,7 +185,7 @@
 </head>
 <body>
 
-    <h1>Translate it, asshat.</h1>
+    <h1 id="heading">Translate it, asshat.</h1>
 
     <div class="translate-box">
         <!-- Source panel -->
@@ -361,6 +361,34 @@
         document.getElementById("sourceText").addEventListener("keydown", (e) => {
             if (e.key === "Enter" && e.ctrlKey) doTranslate();
         });
+    </script>
+    <script>
+    // ?friend= param
+    const params = new URLSearchParams(window.location.search);
+    const friend = params.get('friend');
+    if (friend) {
+        document.getElementById('heading').textContent = `Translate it, ${decodeURIComponent(friend)}.`;
+    }
+
+    // Konami code
+    const konamiCode = [38,38,40,40,37,39,37,39,66,65,13];
+    let konamiIndex = 0;
+    const beepSound = new Audio('/sounds/select.wav');
+    const victorySound = new Audio('/sounds/victory.wav');
+
+    document.addEventListener('keydown', (e) => {
+        if (e.keyCode === konamiCode[konamiIndex]) {
+            beepSound.currentTime = 0;
+            beepSound.play();
+            konamiIndex++;
+            if (konamiIndex === konamiCode.length) {
+                victorySound.play();
+                setTimeout(() => { window.location.href = '/surprise/'; }, 800);
+            }
+        } else {
+            konamiIndex = 0;
+        }
+    });
     </script>
 </body>
 </html>
