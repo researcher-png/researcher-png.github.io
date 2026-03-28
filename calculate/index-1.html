@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculate it, asshat</title>
+    <link rel="icon" type="image/png" href="../LIUAicon.png">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: center;
+            min-height: 100vh;
+            font-family: Arial, sans-serif;
+            background-color: #fff;
+            padding-top: 60px;
+        }
+
+        h1 {
+            font-size: 4rem;
+            margin-bottom: 30px;
+            text-align: center;
+            transition: color 0.2s;
+        }
+
+        h1.error {
+            color: #c0392b;
+        }
+
+        .calc-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 340px;
+            max-width: 90vw;
+        }
+
+        .display {
+            width: 100%;
+            border: 1px solid #dcdcdc;
+            border-radius: 18px;
+            padding: 14px 20px;
+            box-shadow: 0 1px 6px rgba(32,33,36,.28);
+            background-color: #fff;
+            margin-bottom: 12px;
+            min-height: 72px;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .display .expression {
+            font-size: 0.95rem;
+            color: #aaa;
+            min-height: 1.2em;
+            word-break: break-all;
+            text-align: right;
+        }
+
+        .display .value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #111;
+            word-break: break-all;
+            text-align: right;
+            transition: color 0.15s;
+        }
+
+        .display .value.error {
+            color: #c0392b;
+            font-size: 1.1rem;
+        }
+
+        .buttons {
+            width: 100%;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+        }
+
+        .btn {
+            background: #fff;
+            border: 1px solid #dcdcdc;
+            border-radius: 14px;
+            padding: 18px 0;
+            font-size: 1.15rem;
+            cursor: pointer;
+            box-shadow: 0 1px 4px rgba(32,33,36,.15);
+            transition: background 0.1s, box-shadow 0.1s, transform 0.08s;
+            font-family: Arial, sans-serif;
+            color: #111;
+            user-select: none;
+        }
+
+        .btn:hover {
+            background: #f5f5f5;
+            box-shadow: 0 2px 8px rgba(32,33,36,.22);
+        }
+
+        .btn:active {
+            transform: scale(0.95);
+            background: #ececec;
+        }
+
+        .btn.operator {
+            color: #555;
+            font-weight: bold;
+        }
+
+        .btn.equals {
+            background: #111;
+            color: #fff;
+            border-color: #111;
+        }
+
+        .btn.equals:hover {
+            background: #333;
+        }
+
+        .btn.equals:active {
+            background: #000;
+        }
+
+        .btn.clear {
+            color: #c0392b;
+            font-weight: bold;
+        }
+
+        .btn.wide {
+            grid-column: span 2;
+        }
+
+        .footer-link {
+            margin-top: 30px;
+            font-size: 0.95rem;
+            color: #888;
+        }
+
+        .footer-link a {
+            color: #000;
+            font-weight: bold;
+            text-decoration: none;
+        }
+
+        .footer-link a:hover {
+            text-decoration: underline;
+        }
+
+        .info-btn {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 37px;
+            height: 37px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #b1b1cb;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+
+    <h1 id="heading">Calculate it, asshat.</h1>
+
+    <div class="calc-wrapper">
+        <div class="display">
+            <div class="expression" id="expression"></div>
+            <div class="value" id="displayValue">0</div>
+        </div>
+
+        <div class="buttons">
+            <button class="btn clear" data-action="clear">C</button>
+            <button class="btn operator" data-action="sign">+/-</button>
+            <button class="btn operator" data-action="percent">%</button>
+            <button class="btn operator" data-action="op" data-value="/">÷</button>
+
+            <button class="btn" data-action="digit" data-value="7">7</button>
+            <button class="btn" data-action="digit" data-value="8">8</button>
+            <button class="btn" data-action="digit" data-value="9">9</button>
+            <button class="btn operator" data-action="op" data-value="*">×</button>
+
+            <button class="btn" data-action="digit" data-value="4">4</button>
+            <button class="btn" data-action="digit" data-value="5">5</button>
+            <button class="btn" data-action="digit" data-value="6">6</button>
+            <button class="btn operator" data-action="op" data-value="-">−</button>
+
+            <button class="btn" data-action="digit" data-value="1">1</button>
+            <button class="btn" data-action="digit" data-value="2">2</button>
+            <button class="btn" data-action="digit" data-value="3">3</button>
+            <button class="btn operator" data-action="op" data-value="+">+</button>
+
+            <button class="btn wide" data-action="digit" data-value="0">0</button>
+            <button class="btn" data-action="decimal">.</button>
+            <button class="btn equals" data-action="equals">=</button>
+        </div>
+    </div>
+
+    <div class="footer-link">
+        go back to <a href="https://lookitupasshat.com/">Look it up, asshat</a>!
+    </div>
+
+    <a href="../info/" title="Info" class="info-btn">
+        <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="cursor:pointer;">
+            <circle cx="12" cy="12" r="10"></circle>
+            <path d="M12 16v0"></path>
+            <path d="M12 12a2 2 0 1 0-2-2"></path>
+        </svg>
+    </a>
+
+    <script>
+        const heading = document.getElementById('heading');
+        const displayValue = document.getElementById('displayValue');
+        const expressionEl = document.getElementById('expression');
+
+        // URL param support like the main site
+        const params = new URLSearchParams(window.location.search);
+        const friend = params.get('friend');
+        if (friend) {
+            heading.textContent = `Calculate it, ${decodeURIComponent(friend)}.`;
+        }
+
+        let currentValue = '0';
+        let previousValue = null;
+        let operator = null;
+        let waitingForOperand = false;
+        let expression = '';
+        let justEvaluated = false;
+
+        const roasts = [
+            "that's not even a number, asshat.",
+            "divided by zero? seriously?",
+            "you broke math. congrats.",
+            "error. much like your decisions.",
+            "the calculator is judging you.",
+            "bro what did you just do",
+        ];
+
+        function getRandomRoast() {
+            return roasts[Math.floor(Math.random() * roasts.length)];
+        }
+
+        function updateDisplay(val, isError = false) {
+            displayValue.textContent = val;
+            displayValue.classList.toggle('error', isError);
+            expressionEl.textContent = expression;
+        }
+
+        function formatNumber(num) {
+            if (isNaN(num) || !isFinite(num)) return null;
+            // Trim floating point jank
+            let str = parseFloat(num.toPrecision(12)).toString();
+            return str;
+        }
+
+        function handleDigit(digit) {
+            if (justEvaluated) {
+                currentValue = digit;
+                expression = '';
+                justEvaluated = false;
+            } else if (waitingForOperand) {
+                currentValue = digit;
+                waitingForOperand = false;
+            } else {
+                currentValue = currentValue === '0' ? digit : currentValue + digit;
+            }
+            updateDisplay(currentValue);
+        }
+
+        function handleDecimal() {
+            if (justEvaluated) {
+                currentValue = '0.';
+                expression = '';
+                justEvaluated = false;
+                updateDisplay(currentValue);
+                return;
+            }
+            if (waitingForOperand) {
+                currentValue = '0.';
+                waitingForOperand = false;
+            } else if (!currentValue.includes('.')) {
+                currentValue += '.';
+            }
+            updateDisplay(currentValue);
+        }
+
+        function handleOperator(op) {
+            const opSymbols = { '+': '+', '-': '−', '*': '×', '/': '÷' };
+
+            if (operator && !waitingForOperand && !justEvaluated) {
+                // Chain operators
+                const result = evaluate();
+                if (result === null) return;
+                previousValue = result;
+                currentValue = formatNumber(result);
+                expression = currentValue + ' ' + opSymbols[op];
+            } else {
+                previousValue = parseFloat(currentValue);
+                expression = currentValue + ' ' + opSymbols[op];
+            }
+
+            operator = op;
+            waitingForOperand = true;
+            justEvaluated = false;
+            updateDisplay(currentValue);
+        }
+
+        function evaluate() {
+            const prev = parseFloat(previousValue);
+            const curr = parseFloat(currentValue);
+            if (isNaN(prev) || isNaN(curr)) return null;
+            switch (operator) {
+                case '+': return prev + curr;
+                case '-': return prev - curr;
+                case '*': return prev * curr;
+                case '/':
+                    if (curr === 0) return Infinity;
+                    return prev / curr;
+            }
+            return curr;
+        }
+
+        function handleEquals() {
+            if (operator === null || waitingForOperand) return;
+
+            const opSymbols = { '+': '+', '-': '−', '*': '×', '/': '÷' };
+            const fullExpr = (previousValue ?? currentValue) + ' ' + opSymbols[operator] + ' ' + currentValue;
+
+            const result = evaluate();
+
+            if (result === null) return;
+
+            if (!isFinite(result)) {
+                expression = fullExpr + ' =';
+                displayValue.textContent = getRandomRoast();
+                displayValue.classList.add('error');
+                expressionEl.textContent = expression;
+                heading.classList.add('error');
+                heading.textContent = 'seriously?';
+                setTimeout(() => {
+                    heading.classList.remove('error');
+                    heading.textContent = friend ? `Calculate it, ${decodeURIComponent(friend)}.` : 'Calculate it, asshat.';
+                }, 2500);
+                currentValue = '0';
+                previousValue = null;
+                operator = null;
+                waitingForOperand = false;
+                justEvaluated = true;
+                return;
+            }
+
+            const formatted = formatNumber(result);
+            expression = fullExpr + ' =';
+            currentValue = formatted;
+            previousValue = null;
+            operator = null;
+            waitingForOperand = false;
+            justEvaluated = true;
+            updateDisplay(formatted);
+        }
+
+        function handleClear() {
+            currentValue = '0';
+            previousValue = null;
+            operator = null;
+            waitingForOperand = false;
+            expression = '';
+            justEvaluated = false;
+            displayValue.classList.remove('error');
+            updateDisplay('0');
+        }
+
+        function handleSign() {
+            const val = parseFloat(currentValue) * -1;
+            currentValue = formatNumber(val);
+            updateDisplay(currentValue);
+        }
+
+        function handlePercent() {
+            const val = parseFloat(currentValue) / 100;
+            currentValue = formatNumber(val);
+            updateDisplay(currentValue);
+        }
+
+        // Button clicks
+        document.querySelectorAll('.btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const action = btn.dataset.action;
+                const value = btn.dataset.value;
+
+                switch (action) {
+                    case 'digit': handleDigit(value); break;
+                    case 'decimal': handleDecimal(); break;
+                    case 'op': handleOperator(value); break;
+                    case 'equals': handleEquals(); break;
+                    case 'clear': handleClear(); break;
+                    case 'sign': handleSign(); break;
+                    case 'percent': handlePercent(); break;
+                }
+            });
+        });
+
+        // Keyboard support
+        document.addEventListener('keydown', (e) => {
+            if (e.key >= '0' && e.key <= '9') handleDigit(e.key);
+            else if (e.key === '.') handleDecimal();
+            else if (e.key === '+') handleOperator('+');
+            else if (e.key === '-') handleOperator('-');
+            else if (e.key === '*') handleOperator('*');
+            else if (e.key === '/') { e.preventDefault(); handleOperator('/'); }
+            else if (e.key === 'Enter' || e.key === '=') handleEquals();
+            else if (e.key === 'Escape' || e.key === 'c' || e.key === 'C') handleClear();
+            else if (e.key === '%') handlePercent();
+            else if (e.key === 'Backspace') {
+                if (currentValue.length > 1) {
+                    currentValue = currentValue.slice(0, -1);
+                } else {
+                    currentValue = '0';
+                }
+                updateDisplay(currentValue);
+            }
+        });
+
+        // Konami code (inherited from main site)
+        const konamiCode = [38,38,40,40,37,39,37,39,66,65,13];
+        let konamiIndex = 0;
+        const beepSound = new Audio('/sounds/select.wav');
+        const victorySound = new Audio('/sounds/victory.wav');
+
+        document.addEventListener('keydown', (e) => {
+            if (e.keyCode === konamiCode[konamiIndex]) {
+                beepSound.currentTime = 0;
+                beepSound.play();
+                konamiIndex++;
+                if (konamiIndex === konamiCode.length) {
+                    victorySound.play();
+                    setTimeout(() => { window.location.href = '/surprise/'; }, 800);
+                }
+            } else {
+                konamiIndex = 0;
+            }
+        });
+    </script>
+</body>
+</html>
