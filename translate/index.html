@@ -335,29 +335,30 @@
             btn.disabled = true;
             setStatus("Translating...");
             output.value = "";
+            
             if (target === "brainrot") {
     try {
-        const res = await fetch("https://api.llmapi.ai/v1/chat/completions", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                "Authorization": `Bearer llmapi_8d3c2c685f2a40595b47069c174de171b7e4dc6f74374a5660bb3fbc82cfe976`
+        const res = await fetch("https://api.groq.com/openai/v1/chat/completions", {
+    method: "POST",
+    headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer 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`
+    },
+    body: JSON.stringify({
+        model: "llama-3.1-8b-instant",
+        messages: [
+            {
+                role: "system",
+                content: "Translate text into exaggerated Gen Z brainrot / Skibidi Sigma slang. Keep meaning identical. Do not explain anything. Use emojis like ✌️💔🥀😭 often in sets of 2. Keep it short."
             },
-            body: JSON.stringify({
-                model: "gpt-4o",
-                messages: [
-                    {
-                        role: "system",
-                        content: "Translate text into exaggerated Gen Z brainrot / Skibidi Sigma slang. Keep meaning identical. Do not explain anything. Use emojis like ✌️💔🥀😭 often in sets of 2. Keep it short."
-                    },
-                    {
-                        role: "user",
-                        content: text
-                    }
-                ],
-                temperature: 0.9
-            })
-        });
+            {
+                role: "user",
+                content: text
+            }
+        ],
+        temperature: 0.9
+    })
+});
 
         if (!res.ok) {
             if (res.status === 401) throw new Error("Bad API key (401)");
