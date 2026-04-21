@@ -336,6 +336,13 @@
             setStatus("Translating...");
             output.value = "";
 
+            if (target === "brainrot") {
+            output.value = toBrainrot(text);
+            setStatus("");
+            btn.disabled = false;
+            return;
+            }
+
             try {
                 const res = await fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(text)}&langpair=${source === "auto" ? "autodetect" : source}|${target}`);
 
