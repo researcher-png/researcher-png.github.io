@@ -337,10 +337,50 @@
             output.value = "";
 
             if (target === "brainrot") {
-            output.value = toBrainrot(text);
-            setStatus("");
-            btn.disabled = false;
-            return;
+    try {
+        const res = await fetch("https://api.llmapi.ai/v1/chat/completions", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer llmapi_8d3c2c685f2a40595b47069c174de171b7e4dc6f74374a5660bb3fbc82cfe976`
+            },
+            body: JSON.stringify({
+                model: "gpt-4o",
+                messages: [
+                    {
+                        role: "system",
+                        content: "Translate text into exaggerated Gen Z brainrot / Skibidi Sigma slang. Keep meaning identical. Do not explain anything. Use emojis like ✌️💔🥀😭 often in sets of 2. Keep it short."
+                    },
+                    {
+                        role: "user",
+                        content: text
+                    }
+                ],
+                temperature: 0.9
+            })
+        });
+
+        if (!res.ok) {
+            if (res.status === 401) throw new Error("Bad API key (401)");
+            if (res.status === 429) throw new Error("Rate limit (429)");
+            throw new Error(`API error (${res.status})`);
+        }
+
+        const data = await res.json();
+        const output = data?.choices?.[0]?.message?.content;
+
+        if (!output) throw new Error("Empty AI response");
+
+        targetText.value = output;
+        setStatus("");
+
+    } catch (err) {
+        console.error(err);
+        setStatus("Brainrot AI failed: " + err.message);
+    }
+
+    btn.disabled = false;
+    return;
             }
 
             try {
@@ -370,7 +410,7 @@
             if (e.key === "Enter" && e.ctrlKey) doTranslate();
         });
         function toBrainrot(text) {
-    return text + " 💀🗿 skibidi sigma";
+    return text
         }
     </script>
     <script>
