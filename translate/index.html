@@ -335,14 +335,13 @@
             btn.disabled = true;
             setStatus("Translating...");
             output.value = "";
-
             if (target === "brainrot") {
     try {
         const res = await fetch("https://api.llmapi.ai/v1/chat/completions", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
-                "Authorization": `Bearer YOUR_API_KEY_HERE`
+                "Authorization": `Bearer llmapi_8d3c2c685f2a40595b47069c174de171b7e4dc6f74374a5660bb3fbc82cfe976`
             },
             body: JSON.stringify({
                 model: "gpt-4o",
@@ -378,10 +377,6 @@
         console.error(err);
         setStatus("Brainrot AI failed: " + err.message);
     }
-
-    btn.disabled = false;
-    return;
-            }
 
     btn.disabled = false;
     return;
