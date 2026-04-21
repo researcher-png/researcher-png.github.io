@@ -342,7 +342,7 @@
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
-                "Authorization": `Bearer llmapi_8d3c2c685f2a40595b47069c174de171b7e4dc6f74374a5660bb3fbc82cfe976`
+                "Authorization": `Bearer YOUR_API_KEY_HERE`
             },
             body: JSON.stringify({
                 model: "gpt-4o",
@@ -367,17 +367,21 @@
         }
 
         const data = await res.json();
-        const output = data?.choices?.[0]?.message?.content;
+        const aiOutput = data?.choices?.[0]?.message?.content;
 
-        if (!output) throw new Error("Empty AI response");
+        if (!aiOutput) throw new Error("Empty AI response");
 
-        targetText.value = output;
+        output.value = aiOutput;
         setStatus("");
 
     } catch (err) {
         console.error(err);
         setStatus("Brainrot AI failed: " + err.message);
     }
+
+    btn.disabled = false;
+    return;
+            }
 
     btn.disabled = false;
     return;
