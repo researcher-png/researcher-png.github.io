@@ -15,7 +15,6 @@
             font-family: Arial, sans-serif;
             margin: 0;
             background-color: #fff;
-            box-sizing: border-box;
         }
 
         h1 {
@@ -26,14 +25,12 @@
 
         .translate-box {
             display: flex;
-            gap: 0;
             width: 700px;
             max-width: 95vw;
             border: 1px solid #dcdcdc;
             border-radius: 24px;
-            box-shadow: 0 1px 6px rgba(32,33,36,.28);
-            background-color: #fff;
             overflow: hidden;
+            box-shadow: 0 1px 6px rgba(32,33,36,.28);
         }
 
         .lang-panel {
@@ -48,19 +45,14 @@
 
         .lang-select-row {
             display: flex;
-            align-items: center;
             padding: 10px 14px 6px;
-            gap: 8px;
         }
 
         select {
             border: none;
             outline: none;
-            font-family: Arial, sans-serif;
             font-size: 0.95rem;
-            color: #444;
             background: transparent;
-            cursor: pointer;
             flex: 1;
         }
 
@@ -68,24 +60,14 @@
             border: none;
             outline: none;
             resize: none;
-            font-family: Arial, sans-serif;
             font-size: 1.1rem;
             padding: 10px 14px 14px;
             min-height: 140px;
-            background: transparent;
-            color: #111;
             width: 100%;
-            box-sizing: border-box;
         }
 
         textarea[readonly] {
-            color: #333;
             background-color: #fafafa;
-        }
-
-        .divider {
-            width: 1px;
-            background: #dcdcdc;
         }
 
         .swap-btn-wrapper {
@@ -93,7 +75,6 @@
             align-items: center;
             justify-content: center;
             padding: 0 6px;
-            background: #fff;
             border-left: 1px solid #dcdcdc;
             border-right: 1px solid #dcdcdc;
             cursor: pointer;
@@ -102,15 +83,8 @@
         .swap-btn {
             background: none;
             border: none;
-            cursor: pointer;
-            padding: 6px;
-            color: #888;
             font-size: 1.2rem;
-            transition: color 0.2s;
-        }
-
-        .swap-btn:hover {
-            color: #333;
+            cursor: pointer;
         }
 
         .translate-btn-row {
@@ -120,325 +94,170 @@
         }
 
         .translate-btn {
-            background: #000;
-            color: #fff;
+            background: black;
+            color: white;
             border: none;
             border-radius: 20px;
             padding: 8px 20px;
-            font-family: Arial, sans-serif;
-            font-size: 0.95rem;
             cursor: pointer;
-            transition: opacity 0.2s;
-        }
-
-        .translate-btn:hover {
-            opacity: 0.8;
-        }
-
-        .translate-btn:disabled {
-            opacity: 0.4;
-            cursor: default;
         }
 
         .status {
             margin-top: 14px;
             font-size: 0.85rem;
             color: #999;
-            min-height: 1.2em;
-        }
-
-        /* Info button identical to main page */
-        .info-link {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            width: 37px;
-            height: 37px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #b1b1cb;
-            text-decoration: none;
-        }
-
-        /* Back link */
-        .back-link {
-            position: fixed;
-            bottom: 20px;
-            left: 20px;
-            font-size: 0.85rem;
-            color: #b1b1cb;
-            text-decoration: none;
-        }
-
-        .back-link:hover {
-            color: #888;
-        }
-
-        /* Separator row inside panels */
-        .panel-divider {
-            height: 1px;
-            background: #dcdcdc;
-            margin: 0 14px;
         }
     </style>
 </head>
+
 <body>
 
-    <h1 id="heading">Translate it, asshat.</h1>
+<h1 id="heading">Translate it, asshat.</h1>
 
-    <div class="translate-box">
-        <!-- Source panel -->
-        <div class="lang-panel">
-            <div class="lang-select-row">
-                <select id="sourceLang">
-                    <option value="auto">Detect language</option>
-                </select>
-            </div>
-            <div class="panel-divider"></div>
-            <textarea id="sourceText" placeholder="Type something..." maxlength="5000"></textarea>
-            <div class="translate-btn-row">
-                <button class="translate-btn" id="translateBtn" onclick="doTranslate()">Translate</button>
-            </div>
+<div class="translate-box">
+
+    <div class="lang-panel">
+        <div class="lang-select-row">
+            <select id="sourceLang"></select>
         </div>
 
-        <!-- Swap -->
-        <div class="swap-btn-wrapper" onclick="swapLangs()" title="Swap languages">
-            <button class="swap-btn">⇄</button>
-        </div>
+        <textarea id="sourceText" placeholder="Type something..."></textarea>
 
-        <!-- Target panel -->
-        <div class="lang-panel">
-            <div class="lang-select-row">
-                <select id="targetLang">
-                    <option value="en">English</option>
-                </select>
-            </div>
-            <div class="panel-divider"></div>
-            <textarea id="targetText" readonly placeholder="Translation will appear here..."></textarea>
+        <div class="translate-btn-row">
+            <button class="translate-btn" onclick="doTranslate()">Translate</button>
         </div>
     </div>
 
-    <div class="status" id="status"></div>
-<div style="margin-top: 30px; font-size: 0.95rem; color: #888;">
-    also check out <a href="https://lookitupasshat.com/" style="color: #000; font-weight: bold;">Look it up, asshat</a>!
+    <div class="swap-btn-wrapper" onclick="swapLangs()">⇄</div>
+
+    <div class="lang-panel">
+        <div class="lang-select-row">
+            <select id="targetLang"></select>
+        </div>
+
+        <textarea id="targetText" readonly placeholder="Translation will appear here..."></textarea>
+    </div>
+
 </div>
 
-    <!-- Info button -->
-    <a href="../info/" title="Info" class="info-link">
-        <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none"
-            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-            style="cursor:pointer;">
-            <circle cx="12" cy="12" r="10"></circle>
-            <path d="M12 16v0"></path>
-            <path d="M12 12a2 2 0 1 0-2-2"></path>
-        </svg>
-    </a>
+<div class="status" id="status"></div>
 
-    <script>
-        const LIBRE_API = "https://libretranslate.com";
+<script>
+const languages = [
+    { code: "auto", name: "Detect language" },
+    { code: "en", name: "English" },
+    { code: "fr", name: "French" },
+    { code: "es", name: "Spanish" },
+    { code: "de", name: "German" },
+    { code: "it", name: "Italian" },
+    { code: "pt", name: "Portuguese" },
+    { code: "nl", name: "Dutch" },
+    { code: "pl", name: "Polish" },
+    { code: "ru", name: "Russian" },
+    { code: "zh", name: "Chinese" },
+    { code: "ja", name: "Japanese" },
+    { code: "ko", name: "Korean" }
+];
 
-        const languages = [
-            { code: "auto", name: "Detect language" },
-            { code: "en", name: "English" },
-            { code: "fr", name: "French" },
-            { code: "es", name: "Spanish" },
-            { code: "de", name: "German" },
-            { code: "it", name: "Italian" },
-            { code: "pt", name: "Portuguese" },
-            { code: "nl", name: "Dutch" },
-            { code: "pl", name: "Polish" },
-            { code: "ru", name: "Russian" },
-            { code: "zh", name: "Chinese" },
-            { code: "ja", name: "Japanese" },
-            { code: "ko", name: "Korean" },
-            { code: "ar", name: "Arabic" },
-            { code: "hi", name: "Hindi" },
-            { code: "tr", name: "Turkish" },
-            { code: "uk", name: "Ukrainian" },
-            { code: "vi", name: "Vietnamese" },
-            { code: "sv", name: "Swedish" },
-            { code: "fi", name: "Finnish" },
-            { code: "cs", name: "Czech" },
-            { code: "ro", name: "Romanian" },
-            { code: "hu", name: "Hungarian" },
-            { code: "id", name: "Indonesian" },
-        ];
+const sourceSel = document.getElementById("sourceLang");
+const targetSel = document.getElementById("targetLang");
 
-        const sourceSel = document.getElementById("sourceLang");
-        const targetSel = document.getElementById("targetLang");
+languages.forEach(lang => {
+    const opt1 = document.createElement("option");
+    opt1.value = lang.code;
+    opt1.textContent = lang.name;
+    sourceSel.appendChild(opt1);
 
-        // Populate dropdowns
-        sourceSel.innerHTML = "";
-        targetSel.innerHTML = "";
-
-        languages.forEach(lang => {
-            const optS = document.createElement("option");
-            optS.value = lang.code;
-            optS.textContent = lang.name;
-            sourceSel.appendChild(optS);
-
-            if (lang.code !== "auto") {
-                const optT = document.createElement("option");
-                optT.value = lang.code;
-                optT.textContent = lang.name;
-                targetSel.appendChild(optT);
-            }
-        });
-
-        // Default: detect → English
-        sourceSel.value = "auto";
-        targetSel.value = "en";
-
-        function swapLangs() {
-            const srcVal = sourceSel.value;
-            const tgtVal = targetSel.value;
-
-            // Can't swap "auto"
-            if (srcVal === "auto") {
-                setStatus("Can't swap from 'Detect language', pick a source first.");
-                return;
-            }
-
-            sourceSel.value = tgtVal;
-            targetSel.value = srcVal;
-
-            // Also swap text
-            const srcText = document.getElementById("sourceText").value;
-            const tgtText = document.getElementById("targetText").value;
-            document.getElementById("sourceText").value = tgtText;
-            document.getElementById("targetText").value = srcText;
-        }
-
-        function setStatus(msg) {
-            document.getElementById("status").textContent = msg;
-        }
-
-        async function doTranslate() {
-            const text = document.getElementById("sourceText").value.trim();
-            const source = sourceSel.value;
-            const target = targetSel.value;
-            const btn = document.getElementById("translateBtn");
-            const output = document.getElementById("targetText");
-
-            if (!text) {
-                setStatus("Type something first, asshat.");
-                return;
-            }
-
-            if (source === target) {
-                setStatus("That's the same language, asshat.");
-                return;
-            }
-
-            btn.disabled = true;
-            setStatus("Translating...");
-            output.value = "";
-            
-            if (target === "brainrot") {
-    try {
-        const res = await fetch("https://api.groq.com/openai/v1/chat/completions", {
-    method: "POST",
-    headers: {
-        "Content-Type": "application/json",
-        "Authorization": `Bearer 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`
-    },
-    body: JSON.stringify({
-        model: "llama-3.1-8b-instant",
-        messages: [
-            {
-                role: "system",
-                content: "Translate text into exaggerated Gen Z brainrot / Skibidi Sigma slang. Keep meaning identical. Do not explain anything. Use emojis like ✌️💔🥀😭 often in sets of 2. Keep it short."
-            },
-            {
-                role: "user",
-                content: text
-            }
-        ],
-        temperature: 0.9
-    })
+    if (lang.code !== "auto") {
+        const opt2 = document.createElement("option");
+        opt2.value = lang.code;
+        opt2.textContent = lang.name;
+        targetSel.appendChild(opt2);
+    }
 });
 
-        if (!res.ok) {
-            if (res.status === 401) throw new Error("Bad API key (401)");
-            if (res.status === 429) throw new Error("Rate limit (429)");
-            throw new Error(`API error (${res.status})`);
-        }
+sourceSel.value = "auto";
+targetSel.value = "en";
+
+function setStatus(msg) {
+    document.getElementById("status").textContent = msg;
+}
+
+function swapLangs() {
+    if (sourceSel.value === "auto") {
+        setStatus("Pick a source language first.");
+        return;
+    }
+
+    const a = sourceSel.value;
+    sourceSel.value = targetSel.value;
+    targetSel.value = a;
+}
+
+async function doTranslate() {
+    const text = document.getElementById("sourceText").value.trim();
+    const source = sourceSel.value;
+    const target = targetSel.value;
+    const output = document.getElementById("targetText");
+
+    if (!text) return setStatus("Type something first.");
+    if (source === target) return setStatus("Same language.");
+
+    setStatus("Translating...");
+    output.value = "";
+
+    try {
+        const res = await fetch(
+            `https://api.mymemory.translated.net/get?q=${encodeURIComponent(text)}&langpair=${source === "auto" ? "autodetect" : source}|${target}`
+        );
 
         const data = await res.json();
-        const aiOutput = data?.choices?.[0]?.message?.content;
 
-        if (!aiOutput) throw new Error("Empty AI response");
-
-        output.value = aiOutput;
-        setStatus("");
-
-    } catch (err) {
-        console.error(err);
-        setStatus("Brainrot AI failed: " + err.message);
-    }
-
-    btn.disabled = false;
-    return;
-            }
-
-            try {
-                const res = await fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(text)}&langpair=${source === "auto" ? "autodetect" : source}|${target}`);
-
-                if (!res.ok) throw new Error(`API error ${res.status}`);
-                const data = await res.json();
-
-                if (data.responseStatus === 200) {
-    output.value = data.responseData.translatedText;
-                    setStatus("");
-                } else if (data.error) {
-                    setStatus("Error: " + data.error);
-                } else {
-                    setStatus("Something went wrong.");
-                }
-            } catch (err) {
-                setStatus("Translation failed. The API might be down, asshat.");
-                console.error(err);
-            } finally {
-                btn.disabled = false;
-            }
-        }
-
-        // Allow Ctrl+Enter to translate
-        document.getElementById("sourceText").addEventListener("keydown", (e) => {
-            if (e.key === "Enter" && e.ctrlKey) doTranslate();
-        });
-        function toBrainrot(text) {
-    return text
-        }
-    </script>
-    <script>
-    // ?friend= param
-    const params = new URLSearchParams(window.location.search);
-    const friend = params.get('friend');
-    if (friend) {
-        document.getElementById('heading').textContent = `Translate it, ${decodeURIComponent(friend)}.`;
-    }
-
-    // Konami code
-    const konamiCode = [38,38,40,40,37,39,37,39,66,65,13];
-    let konamiIndex = 0;
-    const beepSound = new Audio('/sounds/select.wav');
-    const victorySound = new Audio('/sounds/victory.wav');
-
-    document.addEventListener('keydown', (e) => {
-        if (e.keyCode === konamiCode[konamiIndex]) {
-            beepSound.currentTime = 0;
-            beepSound.play();
-            konamiIndex++;
-            if (konamiIndex === konamiCode.length) {
-                victorySound.play();
-                setTimeout(() => { window.location.href = '/surprise/'; }, 800);
-            }
+        if (data.responseStatus === 200) {
+            output.value = data.responseData.translatedText;
+            setStatus("");
         } else {
-            konamiIndex = 0;
+            setStatus("Translation failed.");
         }
-    });
-    </script>
+    } catch (e) {
+        setStatus("API error.");
+    }
+}
+
+// Konami code (kept)
+const konamiCode = [38,38,40,40,37,39,37,39,66,65,13];
+let konamiIndex = 0;
+
+const beepSound = new Audio('/sounds/select.wav');
+const victorySound = new Audio('/sounds/victory.wav');
+
+document.addEventListener('keydown', (e) => {
+    if (e.keyCode === konamiCode[konamiIndex]) {
+        beepSound.currentTime = 0;
+        beepSound.play();
+        konamiIndex++;
+
+        if (konamiIndex === konamiCode.length) {
+            victorySound.play();
+            setTimeout(() => {
+                window.location.href = '/surprise/';
+            }, 800);
+        }
+    } else {
+        konamiIndex = 0;
+    }
+});
+</script>
+
+<script>
+const params = new URLSearchParams(window.location.search);
+const friend = params.get('friend');
+
+if (friend) {
+    document.getElementById('heading').textContent =
+        `Translate it, ${decodeURIComponent(friend)}.`;
+}
+</script>
+
 </body>
 </html>
