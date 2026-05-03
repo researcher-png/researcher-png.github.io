@@ -58,7 +58,7 @@ btn.className = "theme-toggle";
 btn.innerHTML = `
 <svg id="theme-icon" viewBox="0 0 24 24" width="22" height="22">
 
-    <!-- ☀️ SUN (outline) -->
+    <!--  SUN (outline) -->
     <g id="sun" stroke="currentColor" stroke-width="2" fill="none">
         <circle cx="12" cy="12" r="5"/>
         <line x1="12" y1="1" x2="12" y2="4"/>
@@ -71,7 +71,7 @@ btn.innerHTML = `
         <line x1="17.8" y1="6.2" x2="19.8" y2="4.2"/>
     </g>
 
-    <!-- 🌙 MOON (mask crescent) -->
+    <!--  MOON (mask crescent) -->
     <defs>
         <mask id="moon-mask">
             <rect width="24" height="24" fill="white"/>
@@ -94,11 +94,8 @@ document.body.appendChild(btn);
 
 // -------------------- TOGGLE LOGIC --------------------
 btn.onclick = () => {
+    console.log("CLICKED");
     document.body.classList.toggle("dark");
-    localStorage.setItem(
-        "theme",
-        document.body.classList.contains("dark") ? "dark" : "light"
-    );
 };
 
 // -------------------- APPLY SAVED THEME --------------------
