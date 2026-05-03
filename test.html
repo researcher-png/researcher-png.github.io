@@ -6,6 +6,28 @@
     <title>Look it up, asshat</title>
     <link rel="icon" type="image/png" href="icon.png">
     <style>
+        #suggestions {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    border: 1px solid #ddd;
+    border-top: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    background: white;
+    z-index: 9999;
+}
+
+#suggestions li {
+    padding: 10px;
+    cursor: pointer;
+}
+
+#suggestions li:hover {
+    background: #f2f2f2;
+}
         #menuButton {
     position: fixed;
     top: 20px;
@@ -102,11 +124,13 @@
     <a href="/calculate/">Calculate it, asshat</a>
 </div>
     <h1>Look it up, asshat.</h1>
-    <form action="https://www.google.com/search" method="get" autocomplete="off">
-        <input type="search" name="q" autocomplete="off" placeholder="Search Online...">
-        <button type="submit">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/5/55/Magnifying_glass_icon.svg" alt="Search">
-        </button>
+    <form action="https://www.google.com/search" method="get" autocomplete="off" style="position: relative;">
+    <input type="search" name="q" autocomplete="off" placeholder="Search Online...">
+    <button type="submit">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/5/55/Magnifying_glass_icon.svg" alt="Search">
+    </button>
+
+    <ul id="suggestions"></ul>
     </form>
     <!--<div style="margin-top: 40px; text-align: center;">
   <div style="display: inline-block; transform: scale(0.7); transform-origin: top center;">
@@ -173,6 +197,57 @@ document.addEventListener('keydown', (e) => {
     } else {
         konamiIndex = 0;
     }
+});
+        const searchInput = document.querySelector("input[name='q']");
+const suggestionBox = document.getElementById("suggestions");
+
+let timeout;
+
+searchInput.addEventListener("input", () => {
+    clearTimeout(timeout);
+
+    timeout = setTimeout(async () => {
+        const q = searchInput.value.trim();
+
+        if (!q) {
+            suggestionBox.innerHTML = "";
+            return;
+        }
+
+        try {
+            const res = await fetch(
+                "https://autocomplete-server-1tpu.onrender.com/suggest?q=" +
+                encodeURIComponent(q)
+            );
+
+            const data = await res.json();
+
+            // Google autocomplete format
+            const suggestions = Array.isArray(data) && Array.isArray(data[1])
+                ? data[1]
+                : [];
+
+            suggestionBox.innerHTML = "";
+
+            for (const item of suggestions) {
+                if (!item) continue;
+
+                const li = document.createElement("li");
+                li.textContent = item;
+
+                li.onclick = () => {
+                    searchInput.value = item;
+                    suggestionBox.innerHTML = "";
+                };
+
+                suggestionBox.appendChild(li);
+            }
+
+        } catch (err) {
+            console.log("Suggestion error:", err);
+        }
+
+    }, 150);
 });
     </script>
 </body>
