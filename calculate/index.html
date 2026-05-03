@@ -167,9 +167,49 @@
             color: #b1b1cb;
             text-decoration: none;
         }
+        #menuButton {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    font-size: 26px;
+    cursor: pointer;
+    z-index: 1005;
+    color: #333;
+}
+
+#menu {
+    position: fixed;
+    top: 0;
+    left: -260px;
+    width: 220px;
+    height: 100%;
+    background: #fff;
+    box-shadow: 2px 0 8px rgba(0,0,0,0.1);
+    padding-top: 80px;
+    transition: 0.3s;
+    z-index: 1000;
+}
+
+#menu a {
+    display: block;
+    padding: 15px 20px;
+    text-decoration: none;
+    color: #333;
+    font-size: 1rem;
+    z-index: 1001;
+}
+
+#menu a:hover {
+    background: #f2f2f2;
+}
     </style>
 </head>
 <body>
+    <div id="menu">
+    <a href="/">Main</a>
+    <a href="/info/">Info</a>
+    <a href="/translate/">Translate it, asshat</a>
+    </div>
 
     <h1 id="heading">Calculate it, asshat.</h1>
 
