@@ -55,46 +55,54 @@ input {
 const input = document.getElementById("search");
 const box = document.getElementById("suggestions");
 
-input.addEventListener("input", async () => {
-    const q = input.value.trim();
+// small debounce so you don't spam the server
+let timeout;
 
-    if (!q) {
-        box.innerHTML = "";
-        return;
-    }
+input.addEventListener("input", () => {
+    clearTimeout(timeout);
 
-    try {
-        const res = await fetch(
-    "https://autocomplete-server-1tpu.onrender.com/suggest?q=" +
-    encodeURIComponent(q)
-);
+    timeout = setTimeout(async () => {
+        const q = input.value.trim();
 
-        const data = await res.json();
-
-        // DuckDuckGo returns: [{phrase: "..."}, ...]
-        const suggestions = Array.isArray(data)
-            ? data.map(x => x.phrase).filter(Boolean)
-            : [];
-
-        box.innerHTML = "";
-
-        for (const item of suggestions) {
-            if (!item) continue;
-
-            const li = document.createElement("li");
-            li.textContent = item;
-
-            li.onclick = () => {
-                input.value = item;
-                box.innerHTML = "";
-            };
-
-            box.appendChild(li);
+        if (!q) {
+            box.innerHTML = "";
+            return;
         }
 
-    } catch (err) {
-        console.log("Suggestion error:", err);
-    }
+        try {
+            const res = await fetch(
+                "https://autocomplete-server-1tpu.onrender.com/suggest?q=" +
+                encodeURIComponent(q)
+            );
+
+            const data = await res.json();
+
+            // ✅ FIXED: Google autocomplete format
+            const suggestions = Array.isArray(data) && Array.isArray(data[1])
+                ? data[1]
+                : [];
+
+            box.innerHTML = "";
+
+            for (const item of suggestions) {
+                if (!item) continue;
+
+                const li = document.createElement("li");
+                li.textContent = item;
+
+                li.onclick = () => {
+                    input.value = item;
+                    box.innerHTML = "";
+                };
+
+                box.appendChild(li);
+            }
+
+        } catch (err) {
+            console.log("Suggestion error:", err);
+        }
+
+    }, 150);
 });
 </script>
 
