@@ -1,3 +1,4 @@
+// -------------------- THEME STYLES --------------------
 const style = document.createElement("style");
 style.textContent = `
 :root {
@@ -10,6 +11,7 @@ style.textContent = `
     --link: #000;
     --icon: #b1b1cb;
 }
+
 body.dark {
     --bg: #121212;
     --text: #ffffff;
@@ -21,6 +23,7 @@ body.dark {
     --icon: #888;
 }
 
+/* button */
 .theme-toggle {
     position: fixed;
     bottom: 20px;
@@ -36,48 +39,28 @@ body.dark {
     justify-content: center;
 }
 
+/* smooth icon transition */
 #theme-icon {
-    transition: transform 0.5s ease;
+    transition: transform 0.4s ease;
 }
 
-#rays {
-    transition: opacity 0.3s ease, transform 0.5s ease;
-    transform-origin: center;
-}
-
-#mask-circle {
-    transition: transform 0.5s ease;
-    transform-origin: center;
-}
-
-body.dark #rays {
-    opacity: 0;
-    transform: scale(0.5) rotate(90deg);
-}
-
-body.dark #mask-circle {
-    transform: translate(-4px, 2px);
-}
-
+/* SUN → MOON animation (simple + clean) */
 body.dark #theme-icon {
     transform: rotate(180deg);
 }
 `;
 document.head.appendChild(style);
 
-// Inject button
+// -------------------- BUTTON + SVG --------------------
 const btn = document.createElement("button");
 btn.className = "theme-toggle";
+
 btn.innerHTML = `
 <svg id="theme-icon" viewBox="0 0 24 24" width="22" height="22">
-    <defs>
-        <mask id="moon-mask">
-            <rect width="100%" height="100%" fill="white"/>
-            <circle id="mask-circle" cx="16" cy="8" r="5" fill="black"/>
-        </mask>
-    </defs>
 
-    <g id="rays" stroke="currentColor" stroke-width="2">
+    <!-- ☀️ SUN (outline) -->
+    <g id="sun" stroke="currentColor" stroke-width="2" fill="none">
+        <circle cx="12" cy="12" r="5"/>
         <line x1="12" y1="1" x2="12" y2="4"/>
         <line x1="12" y1="20" x2="12" y2="23"/>
         <line x1="4.2" y1="4.2" x2="6.2" y2="6.2"/>
@@ -88,20 +71,37 @@ btn.innerHTML = `
         <line x1="17.8" y1="6.2" x2="19.8" y2="4.2"/>
     </g>
 
-    <circle cx="12" cy="12" r="5" fill="currentColor" mask="url(#moon-mask)"/>
+    <!-- 🌙 MOON (mask crescent) -->
+    <defs>
+        <mask id="moon-mask">
+            <rect width="24" height="24" fill="white"/>
+            <circle cx="16" cy="8" r="5" fill="black"/>
+        </mask>
+    </defs>
+
+    <circle
+        cx="12"
+        cy="12"
+        r="5"
+        fill="currentColor"
+        mask="url(#moon-mask)"
+    />
+
 </svg>
 `;
+
 document.body.appendChild(btn);
 
-// Toggle logic
+// -------------------- TOGGLE LOGIC --------------------
 btn.onclick = () => {
     document.body.classList.toggle("dark");
-    localStorage.setItem("theme",
+    localStorage.setItem(
+        "theme",
         document.body.classList.contains("dark") ? "dark" : "light"
     );
 };
 
-// Apply saved theme
+// -------------------- APPLY SAVED THEME --------------------
 if (localStorage.getItem("theme") === "dark") {
     document.body.classList.add("dark");
 }
