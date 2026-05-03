@@ -230,6 +230,13 @@ searchInput.addEventListener("input", () => {
 
             suggestionBox.innerHTML = "";
 
+// fake spacer
+const spacer = document.createElement("li");
+spacer.style.height = "12px";
+spacer.style.cursor = "default";
+spacer.style.pointerEvents = "none";
+suggestionBox.appendChild(spacer);
+
             for (const item of suggestions) {
                 if (!item) continue;
 
