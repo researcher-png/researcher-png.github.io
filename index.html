@@ -231,6 +231,12 @@ searchInput.addEventListener("input", () => {
                 : [];
 
             suggestionBox.innerHTML = "";
+            const spacer = document.createElement("li");
+spacer.textContent = "";
+spacer.style.height = "14px";
+spacer.style.pointerEvents = "none";
+spacer.style.cursor = "default";
+suggestionBox.appendChild(spacer);
 
 
             for (const item of suggestions) {
