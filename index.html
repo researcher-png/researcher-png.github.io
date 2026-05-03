@@ -6,27 +6,6 @@
     <title>Look it up, asshat</title>
     <link rel="icon" type="image/png" href="icon.png">
     <style>
-        #suggestions {
-    width: 500px;
-    max-width: 90vw;
-    list-style: none;
-    padding: 0;
-    margin-top: 5px;
-    border: 1px solid #dcdcdc;
-    border-radius: 12px;
-    box-shadow: 0 4px 6px rgba(32,33,36,.28);
-    background: #fff;
-    position: absolute;
-}
-
-#suggestions li {
-    padding: 10px;
-    cursor: pointer;
-}
-
-#suggestions li:hover {
-    background: #f2f2f2;
-}
         #menuButton {
     position: fixed;
     top: 20px;
@@ -61,15 +40,14 @@
     background: #f2f2f2;
 }
         body {
-    display: flex;
-    flex-direction: column;
-    justify-content: center; /* THIS is the key */
-    align-items: center;
-    height: 100vh;
-    font-family: Arial, sans-serif;
-    margin: 0;
-    background-color: #fff;
-        }
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: center;
+            height: 100vh;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            background-color: #fff;
         }
         h1 {
             font-size: 4rem;
@@ -129,7 +107,6 @@
         <button type="submit">
             <img src="https://upload.wikimedia.org/wikipedia/commons/5/55/Magnifying_glass_icon.svg" alt="Search">
         </button>
-        <ul id="suggestions"></ul>
     </form>
     <!--<div style="margin-top: 40px; text-align: center;">
   <div style="display: inline-block; transform: scale(0.7); transform-origin: top center;">
@@ -140,45 +117,7 @@
       </script>
   </div>
     </div> -->
-    <a href="info/" title="Info" style="position:fixed; bottom:20px; right:20px; width:37px; height:37px; display:flex; align-items:center; justify-content:center; color:#b1b1cb;">
-  <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="cursor:pointer;">
-    <circle cx="12" cy="12" r="10"></circle>
-    <path d="M12 16v0"></path>
-    <path d="M12 12a2 2 0 1 0-2-2"></path>
-  </svg>
-    </a>
     <script>
-        const suggestionsBox = document.getElementById("suggestions");
-
-input.addEventListener("input", async () => {
-    const query = input.value.trim();
-
-    if (!query) {
-        suggestionsBox.innerHTML = "";
-        return;
-    }
-
-    try {
-        const res = await fetch(`https://suggestqueries.google.com/complete/search?client=firefox&q=${encodeURIComponent(query)}`);
-        const data = await res.json();
-
-        suggestionsBox.innerHTML = "";
-
-        data[1].forEach(suggestion => {
-            const li = document.createElement("li");
-            li.textContent = suggestion;
-
-            li.onclick = () => {
-                input.value = suggestion;
-                suggestionsBox.innerHTML = "";
-            };
-
-            suggestionsBox.appendChild(li);
-        });
-    } catch (err) {
-        console.error("Suggestion fetch failed", err);
-    }
-});
         const menu = document.getElementById("menu");
 const menuButton = document.getElementById("menuButton");
 
