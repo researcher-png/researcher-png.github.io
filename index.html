@@ -1,139 +1,146 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Look it up, asshat</title>
-<link rel="icon" type="image/jpeg" href="icon.jpg">
-
-<style>
-:root {
-    --bg: #ffffff;
-    --text: #000000;
-    --border: #dcdcdc;
-    --shadow: rgba(32,33,36,.28);
-    --link: #000;
-    --muted: #888;
-}
-
-body.dark {
-    --bg: #121212;
-    --text: #ffffff;
-    --border: #333;
-    --shadow: rgba(0,0,0,.6);
-    --link: #ffffff;
-    --muted: #aaa;
-}
-
-body {
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    align-items: center;
-    height: 100vh;
-    font-family: Arial, sans-serif;
-    margin: 0;
-
-    background-color: var(--bg);
-    color: var(--text);
-    transition: background-color 0.3s, color 0.3s;
-}
-
-h1 {
-    font-size: 4rem;
-    margin-bottom: 30px;
-    text-align: center;
-}
-
-form {
-    display: flex;
-    align-items: center;
-    width: 500px;
-    max-width: 90vw;
-
-    border: 1px solid var(--border);
-    border-radius: 24px;
-    padding: 6px 10px;
-
-    box-shadow: 0 1px 6px var(--shadow);
-    background-color: var(--bg);
-}
-
-input[type="search"] {
-    flex: 1;
-    border: none;
-    outline: none;
-    font-size: 1.2rem;
-    padding: 10px;
-
-    background: transparent;
-    color: var(--text);
-}
-
-button {
-    background: none;
-    border: none;
-    cursor: pointer;
-    padding: 6px;
-}
-
-button img {
-    width: 24px;
-    height: 24px;
-}
-
-button:hover img {
-    opacity: 0.8;
-}
-
-input[type="search"]::-webkit-search-decoration,
-input[type="search"]::-webkit-search-cancel-button,
-input[type="search"]::-webkit-search-results-button,
-input[type="search"]::-webkit-search-results-decoration {
-    display: none;
-}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Look it up, asshat</title>
+    <link rel="icon" type="image/jpeg" href="icon.jpg">
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: center;
+            height: 100vh;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            background-color: #fff;
+        }
+        h1 {
+            font-size: 4rem;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        form {
+            display: flex;
+            align-items: center;
+            width: 500px;
+            max-width: 90vw;
+            border: 1px solid #dcdcdc;
+            border-radius: 24px;
+            padding: 6px 10px;
+            box-shadow: 0 1px 6px rgba(32,33,36,.28);
+            background-color: #fff;
+        }
+        input[type="search"] {
+            flex: 1;
+            border: none;
+            outline: none;
+            font-size: 1.2rem;
+            padding: 10px;
+        }
+        button {
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 6px;
+        }
+        button img {
+            width: 24px;
+            height: 24px;
+        }
+        button:hover img {
+            opacity: 0.8;
+        }
+        input[type="search"]::-webkit-search-decoration,
+        input[type="search"]::-webkit-search-cancel-button,
+        input[type="search"]::-webkit-search-results-button,
+        input[type="search"]::-webkit-search-results-decoration {
+            display: none;
+        }
+    </style>
 </head>
-
 <body>
-
-<h1>Look it up, asshat.</h1>
-
-<form action="https://www.google.com/search" method="get" autocomplete="off">
-    <input type="search" name="q" autocomplete="off" placeholder="Search Online...">
-    <button type="submit">
-        <img src="https://upload.wikimedia.org/wikipedia/commons/5/55/Magnifying_glass_icon.svg" alt="Search">
-    </button>
-</form>
-
-<a href="info/" title="Info"
-style="position:fixed; bottom:20px; right:20px; width:37px; height:37px;
-display:flex; align-items:center; justify-content:center; color:var(--muted);">
-
-<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40"
-viewBox="0 0 24 24" fill="none" stroke="currentColor"
-stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-
-<circle cx="12" cy="12" r="10"></circle>
-<path d="M12 16v0"></path>
-<path d="M12 12a2 2 0 1 0-2-2"></path>
-
-</svg>
-</a>
-
-<div style="margin-top: 30px; font-size: 0.95rem; color: var(--muted); text-align: center;">
-    also check out
-    <a href="https://lookitupasshat.com/translate/" style="color: var(--link); font-weight: bold;">
-        Tranlate it, asshat
+    <h1>Look it up, asshat.</h1>
+    <form action="https://www.google.com/search" method="get" autocomplete="off">
+        <input type="search" name="q" autocomplete="off" placeholder="Search Online...">
+        <button type="submit">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/5/55/Magnifying_glass_icon.svg" alt="Search">
+        </button>
+    </form>
+    <!--<div style="margin-top: 40px; text-align: center;">
+  <div style="display: inline-block; transform: scale(0.7); transform-origin: top center;">
+      <script type='text/javascript' src='https://storage.ko-fi.com/cdn/widget/Widget_2.js'></script>
+      <script type='text/javascript'>
+          kofiwidget2.init('Tip', '#000000', 'D1D41UR0B5');
+          kofiwidget2.draw();
+      </script>
+  </div>
+    </div> -->
+    <a href="info/" title="Info" style="position:fixed; bottom:20px; right:20px; width:37px; height:37px; display:flex; align-items:center; justify-content:center; color:#b1b1cb;">
+  <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="cursor:pointer;">
+    <circle cx="12" cy="12" r="10"></circle>
+    <path d="M12 16v0"></path>
+    <path d="M12 12a2 2 0 1 0-2-2"></path>
+  </svg>
     </a>
+    <script>
+const form = document.querySelector("form");
+const input = form.querySelector("input[name='q']");
+const heading = document.querySelector("h1");
+
+const params = new URLSearchParams(window.location.search);
+const friend = params.get('friend');
+if (friend) {
+    heading.textContent = `Look it up, ${decodeURIComponent(friend)}.`;
+}
+
+const triggers = [
+    "look it up asshat",
+    "lookitupasshat.com",
+    "look it up, asshat",
+    "lookitupasshat.com"
+];
+
+form.addEventListener("submit", (e) => {
+    const query = input.value.toLowerCase().trim();
+    const hostname = window.location.hostname.toLowerCase();
+
+    const isTrigger = triggers.some(trigger => query.includes(trigger) || query.includes(hostname));
+    if (isTrigger) {
+        e.preventDefault();
+        heading.textContent = "you're already on the website, asshat.";
+    }
+});
+
+const konamiCode = [38,38,40,40,37,39,37,39,66,65,13];
+let konamiIndex = 0;
+
+const beepSound = new Audio('/sounds/select.wav');
+const victorySound = new Audio('/sounds/victory.wav');
+
+document.addEventListener('keydown', (e) => {
+    if (e.keyCode === konamiCode[konamiIndex]) {
+        beepSound.currentTime = 0;
+        beepSound.play();
+        konamiIndex++;
+
+        if (konamiIndex === konamiCode.length) {
+            victorySound.play();
+            setTimeout(() => {
+                window.location.href = '/surprise/';
+            }, 800);
+        }
+    } else {
+        konamiIndex = 0;
+    }
+});
+    </script>
+    <div style="margin-top: 30px; font-size: 0.95rem; color: #888; text-align: center;">
+    also check out <a href="https://lookitupasshat.com/translate/" style="color: #000; font-weight: bold;">Tranlate it, asshat</a>
     <br>
-    and
-    <a href="https://lookitupasshat.com/calculate/" style="color: var(--link); font-weight: bold;">
-        Calculate it, asshat
-    </a>!
-</div>
-
-<script src="/theme.js"></script>
-
+    and <a href="https://lookitupasshat.com/calculate/" style="color: #000; font-weight: bold;">Calculate it, asshat</a>!
+    </div>
+    <script src="/theme.js"></script>
 </body>
 </html>
