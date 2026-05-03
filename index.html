@@ -6,58 +6,91 @@
     <title>Look it up, asshat</title>
     <link rel="icon" type="image/jpeg" href="icon.jpg">
     <style>
-        body {
-            display: flex;
-            flex-direction: column;
-            justify-content: flex-start;
-            align-items: center;
-            height: 100vh;
-            font-family: Arial, sans-serif;
-            margin: 0;
-            background-color: #fff;
-        }
-        h1 {
-            font-size: 4rem;
-            margin-bottom: 30px;
-            text-align: center;
-        }
-        form {
-            display: flex;
-            align-items: center;
-            width: 500px;
-            max-width: 90vw;
-            border: 1px solid #dcdcdc;
-            border-radius: 24px;
-            padding: 6px 10px;
-            box-shadow: 0 1px 6px rgba(32,33,36,.28);
-            background-color: #fff;
-        }
-        input[type="search"] {
-            flex: 1;
-            border: none;
-            outline: none;
-            font-size: 1.2rem;
-            padding: 10px;
-        }
-        button {
-            background: none;
-            border: none;
-            cursor: pointer;
-            padding: 6px;
-        }
-        button img {
-            width: 24px;
-            height: 24px;
-        }
-        button:hover img {
-            opacity: 0.8;
-        }
-        input[type="search"]::-webkit-search-decoration,
-        input[type="search"]::-webkit-search-cancel-button,
-        input[type="search"]::-webkit-search-results-button,
-        input[type="search"]::-webkit-search-results-decoration {
-            display: none;
-        }
+    :root {
+        --bg: #ffffff;
+        --text: #000000;
+        --form-bg: #ffffff;
+        --border: #dcdcdc;
+        --shadow: rgba(32,33,36,.28);
+        --muted: #888;
+        --link: #000;
+        --icon: #b1b1cb;
+    }
+
+    body.dark {
+        --bg: #121212;
+        --text: #ffffff;
+        --form-bg: #1e1e1e;
+        --border: #333;
+        --shadow: rgba(0,0,0,.6);
+        --muted: #aaa;
+        --link: #fff;
+        --icon: #888;
+    }
+
+    body {
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: center;
+        height: 100vh;
+        font-family: Arial, sans-serif;
+        margin: 0;
+        background-color: var(--bg);
+        color: var(--text);
+        transition: 0.3s;
+    }
+
+    h1 {
+        font-size: 4rem;
+        margin-bottom: 30px;
+        text-align: center;
+    }
+
+    form {
+        display: flex;
+        align-items: center;
+        width: 500px;
+        max-width: 90vw;
+        border: 1px solid var(--border);
+        border-radius: 24px;
+        padding: 6px 10px;
+        box-shadow: 0 1px 6px var(--shadow);
+        background-color: var(--form-bg);
+    }
+
+    input[type="search"] {
+        flex: 1;
+        border: none;
+        outline: none;
+        font-size: 1.2rem;
+        padding: 10px;
+        background: transparent;
+        color: var(--text);
+    }
+
+    button {
+        background: none;
+        border: none;
+        cursor: pointer;
+        padding: 6px;
+    }
+
+    button img {
+        width: 24px;
+        height: 24px;
+    }
+
+    button:hover img {
+        opacity: 0.8;
+    }
+
+    input[type="search"]::-webkit-search-decoration,
+    input[type="search"]::-webkit-search-cancel-button,
+    input[type="search"]::-webkit-search-results-button,
+    input[type="search"]::-webkit-search-results-decoration {
+        display: none;
+    }
     </style>
 </head>
 <body>
@@ -84,6 +117,10 @@
     <path d="M12 12a2 2 0 1 0-2-2"></path>
   </svg>
     </a>
+    <button onclick="toggleDarkMode()" 
+style="position:fixed; bottom:20px; left:20px; width:37px; height:37px; border:none; background:none; color:var(--icon); cursor:pointer; font-size:20px;">
+    ●
+    </button>
     <script>
 const form = document.querySelector("form");
 const input = form.querySelector("input[name='q']");
@@ -135,11 +172,26 @@ document.addEventListener('keydown', (e) => {
         konamiIndex = 0;
     }
 });
+        function toggleDarkMode() {
+    document.body.classList.toggle("dark");
+
+    if (document.body.classList.contains("dark")) {
+        localStorage.setItem("theme", "dark");
+    } else {
+        localStorage.setItem("theme", "light");
+    }
+}
+
+// Apply saved theme on load
+const savedTheme = localStorage.getItem("theme");
+if (savedTheme === "dark") {
+    document.body.classList.add("dark");
+}
     </script>
     <div style="margin-top: 30px; font-size: 0.95rem; color: #888; text-align: center;">
-    also check out <a href="https://lookitupasshat.com/translate/" style="color: #000; font-weight: bold;">Tranlate it, asshat</a>
+    also check out <a href="https://lookitupasshat.com/translate/" style="color: var(--link); font-weight: bold;">Tranlate it, asshat</a>
     <br>
-    and <a href="https://lookitupasshat.com/calculate/" style="color: #000; font-weight: bold;">Calculate it, asshat</a>!
+    and <a href="https://lookitupasshat.com/calculate/" style="color: var(--link); font-weight: bold;">Calculate it, asshat</a>!
     </div>
 </body>
 </html>
