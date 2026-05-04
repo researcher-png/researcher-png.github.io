@@ -387,6 +387,13 @@ document.addEventListener('keydown', (e) => {
     } else {    
         konamiIndex = 0;    
     }    
-});    
-</script>  </body>    
+});
+    const menu = document.getElementById("menu");
+const menuButton = document.getElementById("menuButton");
+
+menuButton.onclick = () => {
+    menu.style.left = menu.style.left === "0px" ? "-260px" : "0px";
+};
+</script>
+</body>    
 </html>
