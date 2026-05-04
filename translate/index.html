@@ -3,7 +3,41 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">    
     <title>Translate it, asshat</title>    
     <link rel="icon" type="image/png" href="../icon.png">    
-    <style>    
+    <style>
+        #menuButton {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    font-size: 26px;
+    cursor: pointer;
+    z-index: 1005;
+    color: #333;
+}
+
+#menu {
+    position: fixed;
+    top: 0;
+    left: -260px;
+    width: 220px;
+    height: 100%;
+    background: #fff;
+    box-shadow: 2px 0 8px rgba(0,0,0,0.1);
+    padding-top: 80px;
+    transition: 0.3s;
+    z-index: 1000;
+}
+
+#menu a {
+    display: block;
+    padding: 15px 20px;
+    text-decoration: none;
+    color: #333;
+    font-size: 1rem;
+}
+
+#menu a:hover {
+    background: #f2f2f2;
+}
         body {    
             display: flex;    
             flex-direction: column;    
@@ -141,20 +175,6 @@ textarea[readonly] {
     min-height: 1.2em;    
 }    
 
-/* Info button identical to main page */    
-.info-link {    
-    position: fixed;    
-    bottom: 20px;    
-    right: 20px;    
-    width: 37px;    
-    height: 37px;    
-    display: flex;    
-    align-items: center;    
-    justify-content: center;    
-    color: #b1b1cb;    
-    text-decoration: none;    
-}    
-
 /* Back link */    
 .back-link {    
     position: fixed;    
@@ -177,7 +197,15 @@ textarea[readonly] {
 }
 
 </style>  </head>    
-<body>  <h1 id="heading">Translate it, asshat.</h1>    <div class="translate-box">    
+<body>
+    <div id="menuButton">☰</div>
+
+<div id="menu">
+    <a href="/">Main</a>
+    <a href="/info/">Info</a>
+    <a href="/calculate/">Calculate it, asshat</a>
+</div>
+    <h1 id="heading">Translate it, asshat.</h1>    <div class="translate-box">    
     <!-- Source panel -->    
     <div class="lang-panel">    
         <div class="lang-select-row">    
@@ -206,18 +234,8 @@ textarea[readonly] {
     <textarea id="targetText" readonly placeholder="Translation will appear here..."></textarea>    
 </div>
 
-</div>    <div class="status" id="status"></div>  <div style="margin-top: 30px; font-size: 0.95rem; color: #888;">    
-    also check out <a href="https://lookitupasshat.com/" style="color: #000; font-weight: bold;">Look it up, asshat</a>!    
-</div>  <!-- Info button -->    
-<a href="../info/" title="Info" class="info-link">    
-    <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none"    
-        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"    
-        style="cursor:pointer;">    
-        <circle cx="12" cy="12" r="10"></circle>    
-        <path d="M12 16v0"></path>    
-        <path d="M12 12a2 2 0 1 0-2-2"></path>    
-    </svg>    
-</a>    <script>    
+</div>    
+    <script>    
     const LIBRE_API = "https://libretranslate.com";    
   
     const languages = [    
