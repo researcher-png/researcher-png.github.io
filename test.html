@@ -123,7 +123,7 @@
         .spacer {
     height: 40px;
         }
-    #fadeOverlay {
+        #dreamFade {
     position: fixed;
     inset: 0;
     background: black;
@@ -133,28 +133,28 @@
     z-index: 9998;
 }
 
-#fadeOverlay.active {
+#dreamFade.active {
     opacity: 1;
 }
 
-#gifOverlay {
+#dreamGif {
     position: fixed;
     inset: 0;
     display: flex;
     justify-content: center;
     align-items: center;
+    background: black;
     opacity: 0;
     pointer-events: none;
     transition: opacity 1.5s ease;
     z-index: 9999;
-    background: black;
 }
 
-#gifOverlay.active {
+#dreamGif.active {
     opacity: 1;
 }
 
-#gifOverlay img {
+#dreamGif img {
     max-width: 80%;
     max-height: 80%;
 }
@@ -188,6 +188,30 @@
       </script>
   </div>
     </div> -->
+    <!-- DREAM MODE LAYERS -->
+<div id="dreamFade"></div>
+
+<div id="dreamGif">
+    <img src="eepy.gif" alt="dream gif">
+</div>
+
+<audio id="dreamAudio" loop>
+    <source src="eepy.mp3" type="audio/mpeg">
+</audio>
+
+<!-- TEST BUTTON -->
+<button id="dreamTestBtn" style="
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 9999;
+    padding: 10px 14px;
+    border-radius: 10px;
+    border: none;
+    cursor: pointer;
+">
+    Test Dream
+</button>
     <script>
         const menu = document.getElementById("menu");
 const menuButton = document.getElementById("menuButton");
@@ -303,94 +327,72 @@ suggestionBox.appendChild(spacer);
 
     }, 150);
 });
-        let dreamMode = false;
-let idleTimer = null;
+        let dreamTimer;
+let inDream = false;
 
-const IDLE_TIME = 5 * 60 * 1000; // 30 minutes
-
-const fade = document.getElementById("fadeOverlay");
-const gifLayer = document.getElementById("gifOverlay");
+const fade = document.getElementById("dreamFade");
+const gif = document.getElementById("dreamGif");
 const audio = document.getElementById("dreamAudio");
 const testBtn = document.getElementById("dreamTestBtn");
 
-/* reset idle timer on ANY activity */
-function resetIdleTimer() {
-    if (dreamMode) return; // don't reset during dream
+// reset timer on ANY interaction
+function resetDreamTimer() {
+    if (inDream) return;
 
-    clearTimeout(idleTimer);
-    idleTimer = setTimeout(() => {
-        dreamMode = true;
-        startDream();
-    }, IDLE_TIME);
+    clearTimeout(dreamTimer);
+    dreamTimer = setTimeout(startDream, 5 * 60 * 1000); // 5 min
 }
 
-/* wake-up snap (no fade out, just vanish) */
-function exitDream() {
-    dreamMode = false;
+// listen for activity
+["mousemove", "mousedown", "keydown", "scroll", "touchstart"].forEach(evt => {
+    document.addEventListener(evt, resetDreamTimer);
+});
 
-    fade.classList.remove("active");
-    gifLayer.classList.remove("active");
+resetDreamTimer();
 
-    audio.pause();
-    audio.currentTime = 0;
-}
-
-/* dream sequence */
+// START DREAM MODE
 function startDream() {
+    if (inDream) return;
+    inDream = true;
+
+    // fade to black
     fade.classList.add("active");
 
-    // music starts slightly after fade begins
+    // music starts during fade
     setTimeout(() => {
         audio.currentTime = 0;
         audio.play().catch(() => {});
     }, 500);
 
-    // GIF appears after blackout
+    // gif appears after blackout
     setTimeout(() => {
-        gifLayer.classList.add("active");
+        gif.classList.add("active");
     }, 2100);
 }
 
-/* abrupt wake-up on ANY interaction */
-["mousemove", "mousedown", "keydown", "touchstart", "scroll"].forEach(evt => {
-    document.addEventListener(evt, () => {
-        if (dreamMode) {
-            exitDream();
-        }
-        resetIdleTimer();
-    }, { passive: true });
-});
+// WAKE UP (instant snap back)
+function wakeUp() {
+    if (!inDream) return;
 
-/* test button */
-testBtn.addEventListener("click", () => {
-    dreamMode = true;
-    startDream();
-});
+    inDream = false;
 
-/* start initial timer */
-resetIdleTimer();
+    fade.classList.remove("active");
+    gif.classList.remove("active");
+
+    audio.pause();
+    audio.currentTime = 0;
+
+    resetDreamTimer();
+}
+
+// ANY interaction during dream = instant wake
+document.addEventListener("mousemove", wakeUp);
+document.addEventListener("keydown", wakeUp);
+document.addEventListener("mousedown", wakeUp);
+document.addEventListener("touchstart", wakeUp);
+
+// TEST BUTTON
+testBtn.addEventListener("click", startDream);
     </script>
-<!-- Dream Mode layers -->
-<div id="fadeOverlay"></div>
-
-<div id="gifOverlay">
-    <img src="eepy.gif" alt="dream gif">
-</div>
-
-<audio id="dreamAudio" loop>
-    <source src="eepy.mp3" type="audio/mpeg">
-</audio>
-
-<!-- Test button -->
-<button id="dreamTestBtn" style="
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    z-index: 9999;
-    padding: 10px 14px;
-    cursor: pointer;
-">
-    Dream Test
-</button>
 </body>
 </html>
