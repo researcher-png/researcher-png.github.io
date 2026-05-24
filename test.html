@@ -113,9 +113,56 @@
         input[type="search"]::-webkit-search-results-decoration {
             display: none;
         }
+        /* 🌑 fade layer */
+#fadeOverlay {
+    position: fixed;
+    inset: 0;
+    background: black;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 2s ease;
+    z-index: 9999;
+}
+
+#fadeOverlay.active {
+    opacity: 1;
+}
+
+/* 👁 GIF layer */
+#gifOverlay {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 1.5s ease;
+    z-index: 10000;
+    background: black;
+}
+
+#gifOverlay.active {
+    opacity: 1;
+}
+
+#gifOverlay img {
+    max-width: 80%;
+    max-height: 80%;
+}
     </style>
 </head>
 <body>
+    <!-- 🌙 Dream Mode Layer -->
+<div id="fadeOverlay"></div>
+
+<div id="gifOverlay">
+    <img id="gif" src="eepy.gif">
+</div>
+
+<audio id="audio" loop>
+    <source src="eepy.mp3" type="audio/mpeg">
+</audio>
     <div id="menuButton">☰</div>
 
 <div id="menu">
@@ -249,6 +296,70 @@ searchInput.addEventListener("input", () => {
 
     }, 150);
 });
+        // =======================
+// 🌙 DREAM MODE SYSTEM
+// =======================
+
+let idleTimer;
+const IDLE_TIME = 30 * 60 * 1000; // 30 minutes
+let dreamActive = false;
+
+// 🌑 Start Dream Mode
+function startDream() {
+    const fade = document.getElementById("fadeOverlay");
+    const gifLayer = document.getElementById("gifOverlay");
+    const audio = document.getElementById("audio");
+
+    fade.classList.add("active");
+
+    setTimeout(() => {
+        audio.currentTime = 0;
+        audio.play().catch(() => {});
+    }, 500);
+
+    setTimeout(() => {
+        gifLayer.classList.add("active");
+    }, 2100);
+}
+
+// ⚡ Wake up instantly (hard reset)
+function wakeUp() {
+    const fade = document.getElementById("fadeOverlay");
+    const gifLayer = document.getElementById("gifOverlay");
+    const audio = document.getElementById("audio");
+
+    audio.pause();
+    audio.currentTime = 0;
+
+    fade.classList.remove("active");
+    gifLayer.classList.remove("active");
+
+    dreamActive = false;
+}
+
+// 🌙 Trigger dream (only once per cycle)
+function triggerDream() {
+    if (dreamActive) return;
+    dreamActive = true;
+    startDream();
+}
+
+// 🕰️ Reset idle timer
+function resetIdleTimer() {
+    clearTimeout(idleTimer);
+    idleTimer = setTimeout(triggerDream, IDLE_TIME);
+}
+
+// 👁️ Any interaction = wake + reset timer
+["mousemove", "keydown", "touchstart", "scroll", "click"].forEach(evt => {
+    document.addEventListener(evt, () => {
+        wakeUp();
+        resetIdleTimer();
+    }, { passive: true });
+});
+
+// 🚀 start monitoring immediately
+resetIdleTimer();
     </script>
 </body>
 </html>
