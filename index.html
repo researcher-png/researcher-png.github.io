@@ -123,9 +123,42 @@
         .spacer {
     height: 40px;
         }
+        #dreamOverlay {
+    position: fixed;
+    inset: 0;
+    background: black;
+    opacity: 0;
+    pointer-events: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: opacity 1.5s ease;
+    z-index: 99999;
+}
+
+#dreamGif {
+    max-width: 80%;
+    max-height: 80%;
+    opacity: 0;
+    transition: opacity 1.5s ease;
+}
+
+#dreamOverlay.active {
+    opacity: 1;
+}
+
+#dreamOverlay.active #dreamGif {
+    opacity: 1;
+}
     </style>
 </head>
 <body>
+    <div id="dreamOverlay">
+    <img id="dreamGif" src="eepy.gif" />
+    <audio id="dreamAudio" loop>
+        <source src="eepy.mp3" type="audio/mpeg" />
+    </audio>
+    </div>
     <div id="menuButton">☰</div>
 
 <div id="menu">
@@ -268,6 +301,55 @@ suggestionBox.appendChild(spacer);
 
     }, 150);
 });
+        const idleLimit = 30 * 60 * 1000; // 30 min
+
+const overlay = document.getElementById("dreamOverlay");
+const audio = document.getElementById("dreamAudio");
+
+let idleTimer = null;
+let dreamActive = false;
+
+function startTimer() {
+    if (dreamActive) return;
+
+    clearTimeout(idleTimer);
+    idleTimer = setTimeout(enterDreamMode, idleLimit);
+}
+
+function enterDreamMode() {
+    dreamActive = true;
+
+    overlay.classList.add("active");
+
+    setTimeout(() => {
+        audio.currentTime = 0;
+        audio.play().catch(() => {
+            // browser might block autoplay
+        });
+    }, 800);
+}
+
+function exitDreamMode() {
+    dreamActive = false;
+
+    audio.pause();
+    overlay.classList.remove("active");
+
+    startTimer();
+}
+
+// any interaction wakes/reset timer
+["mousemove", "keydown", "touchstart", "scroll"].forEach(evt => {
+    window.addEventListener(evt, () => {
+        if (dreamActive) {
+            exitDreamMode(); // instant snap back to reality
+        }
+        startTimer();
+    }, { passive: true });
+});
+
+// start on load
+startTimer();
     </script>
 </body>
 </html>
