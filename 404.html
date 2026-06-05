@@ -20,19 +20,21 @@ body {
     width: 100%;
     display: flex;
     justify-content: center;
-    padding: 10px 0;
-    border-bottom: 1px solid #e6e6e6;
+    padding: 0;
+    border-bottom: none;
     background: #fff;
 }
 
 .banner img {
-    max-width: 90%;
-    height: auto;
+    width: 100%;
+    max-height: 120px;   /* controls size */
+    object-fit: cover;   /* removes weird edge scaling */
+    display: block;      /* removes tiny baseline gap */
 }
 
 /* main content */
 .container {
-    margin-top: 80px;
+    margin-top: 30px;
     text-align: center;
     max-width: 600px;
     padding: 20px;
