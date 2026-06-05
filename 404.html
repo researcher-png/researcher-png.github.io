@@ -9,94 +9,149 @@
 body {
     margin: 0;
     font-family: Arial, sans-serif;
-    background: #fff;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+    background: #f8f8f8;
+    color: #222;
+    overflow: hidden;
 }
 
-/* banner image */
+/* banner */
 .banner {
-    margin-top: 30px;
     width: 100%;
+    padding-top: 20px;
     display: flex;
     justify-content: center;
-    padding: 0;
-    border-bottom: none;
-    background: #fff;
 }
 
 .banner img {
     width: 100%;
-    max-height: 120px;   /* controls size */
-    object-fit: contain;   /* removes weird edge scaling */
-    display: block;      /* removes tiny baseline gap */
+    max-height: 120px;
+    object-fit: contain;
 }
 
-/* main content */
+/* main */
 .container {
-    margin-top: 30px;
+    height: calc(100vh - 160px);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
     text-align: center;
-    max-width: 600px;
+    position: relative;
     padding: 20px;
 }
 
-h1 {
-    font-size: 4rem;
-    margin: 0;
+/* giant background 404 */
+.bg404 {
+    position: absolute;
+    font-size: 18rem;
+    font-weight: bold;
+    color: rgba(0,0,0,0.04);
+    user-select: none;
+    z-index: 0;
+    letter-spacing: -10px;
 }
 
+/* foreground content */
+.content {
+    position: relative;
+    z-index: 1;
+    max-width: 600px;
+}
+
+h1 {
+    font-size: 2.8rem;
+    margin-bottom: 10px;
+}
 
 p {
-    font-size: 1.2rem;
-    color: #444;
-    margin-top: 20px;
+    color: #555;
+    font-size: 1.1rem;
+    line-height: 1.5;
 }
 
+/* funny line */
 .funny {
-    margin-top: 25px;
-    font-size: 0.95rem;
-    color: #777;
+    margin-top: 20px;
     font-style: italic;
+    color: #888;
+    min-height: 20px;
 }
 
+/* fake status */
+.status {
+    margin-top: 15px;
+    font-size: 0.85rem;
+    color: #999;
+    font-family: monospace;
+}
+
+/* button */
 a {
     display: inline-block;
-    margin-top: 30px;
+    margin-top: 35px;
+    padding: 12px 20px;
+    border-radius: 999px;
     text-decoration: none;
-    color: #333;
+    color: #222;
     border: 1px solid #ccc;
-    padding: 10px 16px;
-    border-radius: 20px;
+    transition: all 0.2s ease;
+    background: white;
 }
 
 a:hover {
-    background: #f2f2f2;
+    transform: translateY(-2px);
+    background: #222;
+    color: white;
+    border-color: #222;
 }
 </style>
 </head>
 
 <body>
 
-<!-- your real banner -->
 <div class="banner">
     <img src="banner.png" alt="site banner">
 </div>
 
 <div class="container">
 
-    <h1>404</h1>
+    <div class="bg404">404</div>
 
-    <p>Page not found.</p>
+    <div class="content">
 
-    <div class="funny" id="funnyText">
-        You were snooping around weren't ya?
+        <h1>Page not found</h1>
+
+        <p>
+            Whatever used to live here is either gone,
+            broken, or hiding from you.
+        </p>
+
+        <div class="funny" id="funnyText"></div>
+
+        <div class="status">
+            STATUS: ur lost my guy i dunno either
+        </div>
+
+        <a href="/">Return home</a>
+
     </div>
-
-    <a href="/">Go back home</a>
-
 </div>
 
+<script>
+const messages = [
+    "You were snooping around, weren't ya?",
+    "This page evaporated.",
+    "Congratulations. You found nothing.",
+    "The page escaped into the woods.",
+    "404: skill issue.",
+    "Either the link is broken or reality is.",
+    "There is nothing here but dust and HTML.",
+    "You took a wrong turn at the internet."
+];
+
+document.getElementById("funnyText").textContent =
+    messages[Math.floor(Math.random() * messages.length)];
+</script>
 
 </body>
 </html>
