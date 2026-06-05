@@ -1,28 +1,111 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>404</title>
-  <style>
-    body {
-      background: #0f0f0f;
-      color: #00ffcc;
-      font-family: monospace;
-      display: flex;
-      height: 100vh;
-      justify-content: center;
-      align-items: center;
-      flex-direction: column;
-      text-align: center;
-    }
-    a {
-      color: #ff4d4d;
-      text-decoration: none;
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>404</title>
+
+<style>
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #fff;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* banner image */
+.banner {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    padding: 10px 0;
+    border-bottom: 1px solid #e6e6e6;
+    background: #fff;
+}
+
+.banner img {
+    max-width: 90%;
+    height: auto;
+}
+
+/* main content */
+.container {
+    margin-top: 80px;
+    text-align: center;
+    max-width: 600px;
+    padding: 20px;
+}
+
+h1 {
+    font-size: 4rem;
+    margin: 0;
+}
+
+img.placeholder {
+    margin-top: 25px;
+    width: 180px;
+    height: 180px;
+    object-fit: cover;
+    border: 1px solid #ddd;
+    border-radius: 12px;
+    background: #f2f2f2;
+}
+
+p {
+    font-size: 1.2rem;
+    color: #444;
+    margin-top: 20px;
+}
+
+.funny {
+    margin-top: 25px;
+    font-size: 0.95rem;
+    color: #777;
+    font-style: italic;
+}
+
+a {
+    display: inline-block;
+    margin-top: 30px;
+    text-decoration: none;
+    color: #333;
+    border: 1px solid #ccc;
+    padding: 10px 16px;
+    border-radius: 20px;
+}
+
+a:hover {
+    background: #f2f2f2;
+}
+</style>
 </head>
+
 <body>
-  <h1>404: Page not found</h1>
-  <p>why the lehh would we have that?</p>
-  <a href="/">Return to base</a>
+
+<!-- your real banner -->
+<div class="banner">
+    <img src="banner.png" alt="site banner">
+</div>
+
+<div class="container">
+
+    <h1>404</h1>
+
+    <!-- placeholder image for future chaos -->
+    <img class="placeholder" src="https://via.placeholder.com/180" alt="missing page image">
+
+    <p>Page not found.</p>
+
+    <div class="funny" id="funnyText">
+        You were snooping around weren't ya?
+    </div>
+
+    <a href="/">Go back home</a>
+
+</div>
+
+
 </body>
 </html>
