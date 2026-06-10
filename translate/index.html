@@ -338,8 +338,14 @@ setStatus("Translating...");
 output.value = ""; 
 
 try {
-const res = await fetch(https://api.mymemory.translated.net/get?q=${encodeURIComponent(text)}&langpair=${source === "auto" ? "autodetect" : source}|${target}`); 
+const langpair = source === "auto"
+  ? `en|${target}`
+  : `${source}|${target}`;
 
+const res = await fetch(
+  `https://api.mymemory.translated.net/get?q=${encodeURIComponent(text)}&langpair=${langpair}`
+);
+  
 if (!res.ok) throw new Error(API error${res.status}`);
 const data = await res.json(); 
 
