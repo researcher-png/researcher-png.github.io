@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Translate it, asshat</title>
     <link rel="icon" type="image/png" href="../LIUAicon.png">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" />
     <style>
       #menuButton {
       position: fixed;
@@ -218,6 +219,30 @@
      .spacer {
        height: 40px;
 }
+        .speak-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.speak-btn .material-symbols-outlined {
+    font-size: 22px;
+    color: #666;
+}
+
+.speak-btn:hover .material-symbols-outlined {
+    color: #111;
+}
+
+.textarea-footer {
+    display: flex;
+    justify-content: flex-end;
+    padding: 0 10px 10px 10px;
+}
 </style> 
 </head>
 <body>
@@ -244,6 +269,11 @@
             </div>
             <div class="panel-divider"></div>
             <textarea id="sourceText" placeholder="Type something..." maxlength="5000"></textarea>
+            <div class="textarea-footer">
+    <button class="speak-btn" onclick="speakText('sourceText', sourceSel.value)">
+        <span class="material-symbols-outlined">volume_up</span>
+    </button>
+            </div>
             <div class="translate-btn-row">
                 <button class="translate-btn" id="translateBtn" onclick="doTranslate()">Translate</button>
             </div>
@@ -263,6 +293,11 @@
             </div>
             <div class="panel-divider"></div>
             <textarea id="targetText" readonly placeholder="Translation will appear here..."></textarea>
+            <div class="textarea-footer">
+    <button class="speak-btn" onclick="speakText('targetText', targetSel.value)">
+        <span class="material-symbols-outlined">volume_up</span>
+    </button>
+            </div>
         </div>
     </div>
 
@@ -403,6 +438,44 @@ const menuButton = document.getElementById("menuButton");
 menuButton.onclick = () => {
 menu.style.left = menu.style.left === "0px" ? "-260px" : "0px";
 };
+      function speakText(textareaId, lang) {
+    const text = document.getElementById(textareaId).value.trim();
+    if (!text) return;
+
+    speechSynthesis.cancel();
+
+    const utterance = new SpeechSynthesisUtterance(text);
+
+    const langMap = {
+        en: "en-US",
+        fr: "fr-CA",
+        es: "es-ES",
+        de: "de-DE",
+        it: "it-IT",
+        pt: "pt-PT",
+        nl: "nl-NL",
+        pl: "pl-PL",
+        ru: "ru-RU",
+        ja: "ja-JP",
+        ko: "ko-KR",
+        zh: "zh-CN",
+        ar: "ar-SA",
+        hi: "hi-IN",
+        tr: "tr-TR",
+        uk: "uk-UA",
+        vi: "vi-VN",
+        sv: "sv-SE",
+        fi: "fi-FI",
+        cs: "cs-CZ",
+        ro: "ro-RO",
+        hu: "hu-HU",
+        id: "id-ID"
+    };
+
+    utterance.lang = langMap[lang] || "en-US";
+
+    speechSynthesis.speak(utterance);
+      }
   </script>
 </body>
 </html>
