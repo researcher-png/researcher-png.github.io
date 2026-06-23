@@ -220,22 +220,31 @@
        height: 40px;
 }
         .speak-btn {
-    background: none;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
     border: none;
+    background: #000;
     cursor: pointer;
-    padding: 6px;
+
     display: flex;
     align-items: center;
     justify-content: center;
+
+    padding: 0;
 }
 
 .speak-btn .material-symbols-outlined {
-    font-size: 22px;
-    color: #666;
+    color: #fff;
+    font-size: 20px;
 }
 
 .speak-btn:hover .material-symbols-outlined {
     color: #111;
+}
+.speak-btn:hover {
+    transform: scale(1.05);
+    transition: 0.15s ease;
 }
 
 .textarea-footer {
