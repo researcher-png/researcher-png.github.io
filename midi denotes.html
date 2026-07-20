@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>MIDI Note Extractor</title>
+</head>
+<body>
+  <h2>MIDI Notes (Lowest → Highest)</h2>
+
+  <input type="file" id="midiFile" accept=".mid,.midi">
+  <pre id="output">Load a MIDI file...</pre>
+
+  <script src="https://cdn.jsdelivr.net/npm/@tonejs/midi"></script>
+
+  <script>
+    const fileInput = document.getElementById("midiFile");
+    const output = document.getElementById("output");
+
+    function midiToNote(num) {
+      const notes = [
+        "C", "C#", "D", "D#", "E", "F",
+        "F#", "G", "G#", "A", "A#", "B"
+      ];
+
+      const octave = Math.floor(num / 12) - 1;
+      return notes[num % 12] + octave;
+    }
+
+    fileInput.addEventListener("change", async (event) => {
+      const file = event.target.files[0];
+      const arrayBuffer = await file.arrayBuffer();
+
+      const midi = new Midi(arrayBuffer);
+
+      let notes = [];
+
+      midi.tracks.forEach(track => {
+        track.notes.forEach(note => {
+          notes.push(note.midi);
+        });
+      });
+
+      // Remove duplicates and sort lowest to highest
+      notes = [...new Set(notes)].sort((a, b) => a - b);
+
+      output.textContent = notes
+        .map(n => midiToNote(n))
+        .join("\n");
+    });
+  </script>
+</body>
+</html>
