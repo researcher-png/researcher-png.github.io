@@ -3,155 +3,364 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>404</title>
+
+<title>404 - Look It Up Asshat</title>
 
 <style>
+
+:root {
+    --white: #ffffff;
+    --glow: rgba(255, 255, 255, 0.7);
+}
+
+
+/* =========================================================
+   PAGE
+   ========================================================= */
+
+* {
+    box-sizing: border-box;
+}
+
+html,
 body {
     margin: 0;
-    font-family: Arial, sans-serif;
-    background: #f8f8f8;
-    color: #222;
+    width: 100%;
+    height: 100%;
+}
+
+body {
+    background-image: url("/path/to/your/background.jpg");
+
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+
+    color: var(--white);
+
+    font-family: "Courier New", monospace;
+
     overflow: hidden;
 }
 
-/* banner */
-.banner {
-    width: 100%;
-    padding-top: 20px;
-    display: flex;
-    justify-content: center;
-}
 
-.banner img {
-    width: 100%;
-    max-height: 120px;
-    object-fit: contain;
-}
+/* =========================================================
+   CRT SCREEN
+   ========================================================= */
 
-/* main */
-.container {
-    min-height: calc(100vh - 160px);
+.crt {
+    position: relative;
+
+    width: 100vw;
+    height: 100vh;
+
+    overflow: hidden;
+
     display: flex;
     flex-direction: column;
-    justify-content: center;
     align-items: center;
-    text-align: center;
-    position: relative;
-    padding: 20px;
+
+    filter:
+        contrast(1.05)
+        brightness(1.05);
+
+    animation: crt-flicker 0.18s infinite;
 }
 
-/* giant background 404 */
-.bg404 {
+
+/* =========================================================
+   VERY SUBTLE SCANLINES
+   ========================================================= */
+
+.crt::before {
+    content: "";
+
     position: absolute;
-    font-size: 18rem;
-    font-weight: bold;
-    color: rgba(0,0,0,0.04);
-    user-select: none;
-    z-index: 0;
-    letter-spacing: -10px;
+    inset: 0;
+
+    pointer-events: none;
+
+    z-index: 100;
+
+    background:
+        repeating-linear-gradient(
+            to bottom,
+            rgba(0, 0, 0, 0) 0px,
+            rgba(0, 0, 0, 0) 2px,
+            rgba(0, 0, 0, 0.035) 3px,
+            rgba(0, 0, 0, 0.035) 4px
+        );
+
+    /* Keeps the effect extremely subtle */
+    opacity: 0.7;
 }
 
-/* foreground content */
-.content {
-    position: relative;
-    z-index: 1;
-    max-width: 600px;
+
+/* =========================================================
+   LOGO
+   ========================================================= */
+
+.logo {
+    position: absolute;
+
+    top: clamp(35px, 7vh, 80px);
+    left: clamp(30px, 7vw, 90px);
+
+    width: clamp(150px, 24vw, 300px);
+
+    height: auto;
+
+    filter:
+        brightness(1.4)
+        drop-shadow(0 0 5px var(--glow));
+
+    z-index: 10;
 }
 
-h1 {
-    font-size: 2.8rem;
-    margin-bottom: 10px;
+
+/* =========================================================
+   ERROR CONTENT
+   ========================================================= */
+
+.error {
+    position: absolute;
+
+    top: 50%;
+    left: 50%;
+
+    transform:
+        translate(-50%, -50%);
+
+    text-align: center;
+
+    width: min(90vw, 900px);
+
+    z-index: 10;
 }
 
-p {
-    color: #555;
-    font-size: 1.1rem;
-    line-height: 1.5;
+
+/* =========================================================
+   404
+   ========================================================= */
+
+.code {
+    font-size:
+        clamp(55px, 9vw, 115px);
+
+    line-height: 0.9;
+
+    letter-spacing: 0.08em;
+
+    margin-bottom:
+        clamp(20px, 4vh, 40px);
+
+    /* Slightly out-of-focus CRT appearance */
+    filter: blur(0.7px);
+
+    text-shadow:
+        0 0 4px white,
+        0 0 12px rgba(255, 255, 255, 0.8),
+
+        /* Tiny CRT RGB separation */
+        2px 0 0 rgba(255, 0, 0, 0.20),
+        -2px 0 0 rgba(0, 255, 255, 0.20);
 }
 
-/* funny line */
-.funny {
-    margin-top: 20px;
-    font-style: italic;
-    color: #888;
-    min-height: 20px;
+
+/* =========================================================
+   PAGE NOT FOUND
+   ========================================================= */
+
+.message {
+    font-size:
+        clamp(24px, 4vw, 55px);
+
+    line-height: 1.1;
+
+    letter-spacing: 0.08em;
+
+    filter: blur(0.7px);
+
+    text-shadow:
+        0 0 4px white,
+        0 0 10px rgba(255, 255, 255, 0.65),
+
+        /* Tiny CRT RGB separation */
+        2px 0 0 rgba(255, 0, 0, 0.18),
+        -2px 0 0 rgba(0, 255, 255, 0.18);
 }
 
-/* fake status */
-.status {
-    margin-top: 15px;
-    font-size: 0.85rem;
-    color: #999;
-    font-family: monospace;
-}
 
-/* button */
-a {
+/* =========================================================
+   BACK HOME
+   ========================================================= */
+
+.home {
     display: inline-block;
-    margin-top: 35px;
-    padding: 12px 20px;
-    border-radius: 999px;
+
+    margin-top:
+        clamp(40px, 7vh, 75px);
+
+    color: white;
+
     text-decoration: none;
-    color: #222;
-    border: 1px solid #ccc;
-    transition: all 0.2s ease;
-    background: white;
+
+    font-size:
+        clamp(20px, 3vw, 38px);
+
+    letter-spacing: 0.12em;
+
+    filter: blur(0.7px);
+
+    text-shadow:
+        0 0 5px white,
+        0 0 12px rgba(255, 255, 255, 0.7);
+
+    transition:
+        opacity 0.15s ease,
+        text-shadow 0.15s ease;
 }
 
-a:hover {
-    transform: translateY(-2px);
-    background: #222;
-    color: white;
-    border-color: #222;
+
+/* =========================================================
+   BACK HOME HOVER
+   ========================================================= */
+
+.home:hover {
+    opacity: 0.75;
+
+    text-shadow:
+        0 0 3px white,
+        0 0 25px white;
 }
+
+
+/* =========================================================
+   CRT FLICKER
+   ========================================================= */
+
+@keyframes crt-flicker {
+
+    0% {
+        opacity: 1;
+    }
+
+    5% {
+        opacity: 0.98;
+    }
+
+    10% {
+        opacity: 1;
+    }
+
+    15% {
+        opacity: 0.97;
+    }
+
+    20% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.99;
+    }
+
+    52% {
+        opacity: 0.94;
+    }
+
+    54% {
+        opacity: 1;
+    }
+
+    75% {
+        opacity: 0.98;
+    }
+
+    76% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}
+
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media (max-width: 600px) {
+
+    .logo {
+        top: 35px;
+        left: 30px;
+
+        width: 155px;
+    }
+
+    .error {
+        width: 94vw;
+    }
+
+    .message {
+        letter-spacing: 0.04em;
+    }
+}
+
+
+/* =========================================================
+   REDUCED MOTION
+   ========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+
+    .crt {
+        animation: none;
+    }
+}
+
 </style>
 </head>
 
+
 <body>
 
-<div class="banner">
-    <img src="banner.png" alt="site banner">
-</div>
+<div class="crt">
 
-<div class="container">
+    <!-- YOUR LOGO -->
+    <!-- Replace with your actual logo path -->
 
-    <div class="bg404">404</div>
+    <img
+        class="logo"
+        src="404banner.png"
+        alt="Look It Up Asshat"
+    >
 
-    <div class="content">
 
-        <h1>Page not found</h1>
+    <!-- 404 MESSAGE -->
 
-        <p>
-            Whatever used to live here is either gone,
-            broken, or hiding from you.
-        </p>
+    <main class="error">
 
-        <div class="funny" id="funnyText"></div>
-
-        <div class="status">
-            STATUS: ur lost my guy i dunno either
+        <div class="code">
+            404
         </div>
 
-        <a href="/">Return home</a>
+        <div class="message">
+            PAGE NOT FOUND
+        </div>
 
-    </div>
+        <a
+            class="home"
+            href="/"
+        >
+            BACK HOME
+        </a>
+
+    </main>
+
 </div>
-
-<script>
-const messages = [
-    "You were snooping around, weren't ya?",
-    "This page evaporated.",
-    "Congratulations. You found nothing.",
-    "The page escaped into the woods.",
-    "404: skill issue.",
-    "Either the link is broken or reality is.",
-    "There is nothing here but dust and HTML.",
-    "You took a wrong turn at the internet."
-];
-
-document.getElementById("funnyText").textContent =
-    messages[Math.floor(Math.random() * messages.length)];
-</script>
 
 </body>
 </html>
