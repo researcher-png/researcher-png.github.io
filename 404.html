@@ -172,6 +172,8 @@ body {
     font-size:
         clamp(24px, 4vw, 55px);
 
+    color: white;
+
     line-height: 1.1;
 
     letter-spacing: 0.08em;
@@ -713,5 +715,3 @@ document.addEventListener(
 
 </body>
 </html>
-
-The key difference is that the mobile visualizer is completely outside ".crt", so your "filter", "overflow: hidden", and scanline stacking context can't interfere with its positioning. It also has "z-index: 9999" and its own 28px height calculation.
