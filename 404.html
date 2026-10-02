@@ -364,7 +364,7 @@ body {
 
     text-align: center;
 
-    filter: blur(0.8px);
+    filter: blur(clamp(0.8px, 0.22vw, 1.6px));
 
     text-shadow:
         2px 0 0 rgba(255, 0, 0, 0.18),
@@ -377,7 +377,7 @@ body {
     z-index: 30;
 
     animation:
-        music-prompt-flash 1s steps(1, end) infinite;
+        music-prompt-flash 1.5s steps(1, end) infinite;
 }
 
 
