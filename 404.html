@@ -246,6 +246,72 @@ body {
         0 0 31px white;
 }
 
+/* =========================================================
+   MUSIC START PROMPT
+   ========================================================= */
+
+.music-prompt {
+    position: fixed;
+
+    left: 50%;
+
+    /* Directly above the desktop visualizer */
+    bottom: 70px;
+
+    transform: translateX(-50%);
+
+    width: max-content;
+    max-width: 90vw;
+
+    color: white;
+
+    font-size:
+        clamp(12px, 1.8vw, 18px);
+
+    letter-spacing: 0.08em;
+
+    text-align: center;
+
+    filter:
+        blur(clamp(0.8px, 0.22vw, 1.6px));
+
+    text-shadow:
+        2px 0 0 rgba(255, 0, 0, 0.18),
+        -2px 0 0 rgba(0, 255, 255, 0.18);
+
+    pointer-events: none;
+
+    z-index: 30;
+
+    /* Completely invisible until autoplay fails */
+    display: none;
+}
+
+
+/* =========================================================
+   MUSIC PROMPT FLASH
+   ========================================================= */
+
+.music-prompt.visible {
+    display: block;
+
+    animation:
+        music-prompt-flash 1.5s steps(1, end) infinite;
+}
+
+@keyframes music-prompt-flash {
+
+    0%,
+    49.999% {
+        opacity: 1;
+    }
+
+    50%,
+    100% {
+        opacity: 0;
+    }
+}
+
 
 /* =========================================================
    DESKTOP MUSIC VISUALIZER
@@ -338,74 +404,6 @@ body {
     transition:
         height 0.06s linear;
 }
-
-
-/* =========================================================
-   MUSIC START PROMPT
-   ========================================================= */
-
-.music-prompt {
-    position: fixed;
-
-    left: 50%;
-
-    /* Directly above the desktop visualizer */
-    bottom: 7000px;
-
-    transform: translateX(-50%);
-
-    width: max-content;
-    max-width: 90vw;
-
-    color: white;
-
-    font-size:
-        clamp(12px, 1.8vw, 18px);
-
-    letter-spacing: 0.08em;
-
-    text-align: center;
-
-    filter:
-        blur(clamp(0.8px, 0.22vw, 1.6px));
-
-    text-shadow:
-        2px 0 0 rgba(255, 0, 0, 0.18),
-        -2px 0 0 rgba(0, 255, 255, 0.18);
-
-    pointer-events: none;
-
-    z-index: 30;
-
-    /* Completely invisible until autoplay fails */
-    display: none;
-}
-
-
-/* =========================================================
-   MUSIC PROMPT FLASH
-   ========================================================= */
-
-.music-prompt.visible {
-    display: block;
-
-    animation:
-        music-prompt-flash 1.5s steps(1, end) infinite;
-}
-
-@keyframes music-prompt-flash {
-
-    0%,
-    49.999% {
-        opacity: 1;
-    }
-
-    50%,
-    100% {
-        opacity: 0;
-    }
-}
-
 
 /* =========================================================
    CRT FLICKER
@@ -567,15 +565,6 @@ body {
 
     </main>
 
-
-    <!-- DESKTOP MUSIC VISUALIZER -->
-
-    <div
-        class="visualizer"
-        id="visualizer"
-    ></div>
-
-
     <!-- MUSIC START PROMPT -->
 
     <div
@@ -592,6 +581,15 @@ body {
     </div>
 
 </div>
+
+
+    <!-- DESKTOP MUSIC VISUALIZER -->
+
+    <div
+        class="visualizer"
+        id="visualizer"
+    ></div>
+    
 
 
 <!-- =========================================================
