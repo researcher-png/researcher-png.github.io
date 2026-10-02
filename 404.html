@@ -91,7 +91,6 @@ body {
             rgba(0, 0, 0, 0.035) 4px
         );
 
-    /* Keeps the effect extremely subtle */
     opacity: 0.7;
 }
 
@@ -154,14 +153,12 @@ body {
     margin-bottom:
         clamp(20px, 4vh, 40px);
 
-    /* Slightly out-of-focus CRT appearance */
     filter: blur(0.7px);
 
     text-shadow:
         0 0 4px white,
         0 0 12px rgba(255, 255, 255, 0.8),
 
-        /* Tiny CRT RGB separation */
         2px 0 0 rgba(255, 0, 0, 0.20),
         -2px 0 0 rgba(0, 255, 255, 0.20);
 }
@@ -185,7 +182,6 @@ body {
         0 0 4px white,
         0 0 10px rgba(255, 255, 255, 0.65),
 
-        /* Tiny CRT RGB separation */
         2px 0 0 rgba(255, 0, 0, 0.18),
         -2px 0 0 rgba(0, 255, 255, 0.18);
 }
@@ -232,6 +228,53 @@ body {
     text-shadow:
         0 0 3px white,
         0 0 25px white;
+}
+
+
+/* =========================================================
+   MUSIC VISUALIZER
+   ========================================================= */
+
+.visualizer {
+    position: fixed;
+
+    bottom: 25px;
+    left: 50%;
+
+    transform: translateX(-50%);
+
+    width: min(300px, 65vw);
+    height: 35px;
+
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+
+    gap: 3px;
+
+    z-index: 20;
+
+    pointer-events: none;
+
+    filter:
+        blur(0.4px)
+        drop-shadow(0 0 5px var(--glow));
+}
+
+.visualizer span {
+    width: 3px;
+    height: 3px;
+
+    min-height: 3px;
+
+    background: white;
+
+    box-shadow:
+        0 0 4px white,
+        0 0 8px rgba(255, 255, 255, 0.6);
+
+    transition:
+        height 0.06s linear;
 }
 
 
@@ -307,6 +350,19 @@ body {
     .message {
         letter-spacing: 0.04em;
     }
+
+    .visualizer {
+        bottom: 18px;
+
+        width: 65vw;
+        height: 28px;
+
+        gap: 2px;
+    }
+
+    .visualizer span {
+        width: 2px;
+    }
 }
 
 
@@ -330,7 +386,6 @@ body {
 <div class="crt">
 
     <!-- YOUR LOGO -->
-    <!-- Replace with your actual logo path -->
 
     <img
         class="logo"
@@ -360,27 +415,194 @@ body {
 
     </main>
 
+
+    <!-- MUSIC VISUALIZER -->
+
+    <div
+        class="visualizer"
+        id="visualizer"
+    ></div>
+
 </div>
+
+
+<!-- =========================================================
+     BACKGROUND MUSIC
+     ========================================================= -->
+
 <audio id="bgMusic" loop>
     <source src="404-music.mp3" type="audio/mpeg">
 </audio>
 
+
 <script>
-    const music = document.getElementById("bgMusic");
 
-    music.volume = 0.3;
+const music =
+    document.getElementById("bgMusic");
 
-    // Try autoplay
-    music.play().catch(() => {
-        // Autoplay was blocked — wait for user interaction
-        const startMusic = () => {
-            music.play().catch(() => {});
-        };
+const visualizer =
+    document.getElementById("visualizer");
 
-        document.addEventListener("click", startMusic, { once: true });
-        document.addEventListener("touchstart", startMusic, { once: true });
-        document.addEventListener("keydown", startMusic, { once: true });
+music.volume = 0.3;
+
+
+/* =========================================================
+   CREATE VISUALIZER BARS
+   ========================================================= */
+
+const barCount = 40;
+
+for (let i = 0; i < barCount; i++) {
+
+    const bar =
+        document.createElement("span");
+
+    visualizer.appendChild(bar);
+}
+
+const bars =
+    visualizer.querySelectorAll("span");
+
+
+/* =========================================================
+   AUDIO ANALYZER
+   ========================================================= */
+
+let audioContext;
+let analyser;
+let source;
+let dataArray;
+let analyzerStarted = false;
+
+
+function startVisualizer() {
+
+    if (analyzerStarted)
+        return;
+
+    analyzerStarted = true;
+
+    audioContext = new (
+        window.AudioContext ||
+        window.webkitAudioContext
+    )();
+
+    analyser =
+        audioContext.createAnalyser();
+
+    analyser.fftSize = 128;
+
+    source =
+        audioContext.createMediaElementSource(music);
+
+    source.connect(analyser);
+
+    analyser.connect(
+        audioContext.destination
+    );
+
+    dataArray =
+        new Uint8Array(
+            analyser.frequencyBinCount
+        );
+
+    animateVisualizer();
+}
+
+
+/* =========================================================
+   VISUALIZER ANIMATION
+   ========================================================= */
+
+function animateVisualizer() {
+
+    requestAnimationFrame(
+        animateVisualizer
+    );
+
+    if (!analyser)
+        return;
+
+    analyser.getByteFrequencyData(
+        dataArray
+    );
+
+    bars.forEach((bar, i) => {
+
+        const index =
+            Math.floor(
+                i *
+                dataArray.length /
+                bars.length
+            );
+
+        const value =
+            dataArray[index];
+
+        const height =
+            Math.max(
+                3,
+                (value / 255) * 35
+            );
+
+        bar.style.height =
+            `${height}px`;
     });
+}
+
+
+/* =========================================================
+   START MUSIC
+   ========================================================= */
+
+function startMusic() {
+
+    music.play()
+        .then(() => {
+
+            startVisualizer();
+
+            if (
+                audioContext &&
+                audioContext.state === "suspended"
+            ) {
+                audioContext.resume();
+            }
+
+        })
+        .catch(() => {});
+}
+
+
+/* =========================================================
+   TRY AUTOPLAY
+   ========================================================= */
+
+startMusic();
+
+
+/* =========================================================
+   AUTOPLAY FALLBACK
+   ========================================================= */
+
+document.addEventListener(
+    "click",
+    startMusic,
+    { once: true }
+);
+
+document.addEventListener(
+    "touchstart",
+    startMusic,
+    { once: true }
+);
+
+document.addEventListener(
+    "keydown",
+    startMusic,
+    { once: true }
+);
+
 </script>
 
 </body>
