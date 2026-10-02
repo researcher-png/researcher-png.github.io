@@ -12,6 +12,7 @@
     --white: #ffffff;
     --glow: rgba(255, 255, 255, 0.7);
 }
+
 @font-face {
     font-family: "Roboto-Regular";
     src: url("Roboto-Regular.ttf") format("truetype");
@@ -96,10 +97,13 @@ body {
     opacity: 0.9;
 
     filter: blur(0.1px);
-    animation: scanline-scroll 12s linear infinite;
+
+    animation:
+        scanline-scroll 12s linear infinite;
 }
 
 @keyframes scanline-scroll {
+
     from {
         background-position: 0 0;
     }
@@ -170,10 +174,10 @@ body {
     margin-bottom:
         clamp(20px, 4vh, 40px);
 
-    filter: blur(clamp(0.8px, 0.22vw, 1.6px));
+    filter:
+        blur(clamp(0.8px, 0.22vw, 1.6px));
 
     text-shadow:
-
         2px 0 0 rgba(255, 0, 0, 0.20),
         -2px 0 0 rgba(0, 255, 255, 0.20);
 }
@@ -193,10 +197,10 @@ body {
 
     letter-spacing: 0.08em;
 
-    filter: blur(clamp(0.8px, 0.22vw, 1.6px));
+    filter:
+        blur(clamp(0.8px, 0.22vw, 1.6px));
 
     text-shadow:
-
         2px 0 0 rgba(255, 0, 0, 0.18),
         -2px 0 0 rgba(0, 255, 255, 0.18);
 }
@@ -221,10 +225,10 @@ body {
 
     letter-spacing: 0.12em;
 
-    filter: blur(clamp(0.8px, 0.22vw, 1.6px));
+    filter:
+        blur(clamp(0.8px, 0.22vw, 1.6px));
 
     text-shadow:
-
         2px 0 0 rgba(255, 0, 0, 0.18),
         -2px 0 0 rgba(0, 255, 255, 0.18);
 
@@ -246,22 +250,42 @@ body {
         0 0 31px white;
 }
 
+
+/* =========================================================
+   MUSIC AREA
+   ========================================================= */
+
+.music-area {
+    position: fixed;
+
+    left: 50%;
+    bottom: 25px;
+
+    transform: translateX(-50%);
+
+    width: min(300px, 65vw);
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    z-index: 30;
+
+    pointer-events: none;
+}
+
+
 /* =========================================================
    MUSIC START PROMPT
    ========================================================= */
 
 .music-prompt {
-    position: fixed;
-
-    left: 50%;
-
-    /* Directly above the desktop visualizer */
-    bottom: 70px;
-
-    transform: translateX(-50%);
+    display: none;
 
     width: max-content;
     max-width: 90vw;
+
+    margin-bottom: 10px;
 
     color: white;
 
@@ -278,13 +302,6 @@ body {
     text-shadow:
         2px 0 0 rgba(255, 0, 0, 0.18),
         -2px 0 0 rgba(0, 255, 255, 0.18);
-
-    pointer-events: none;
-
-    z-index: 30;
-
-    /* Completely invisible until autoplay fails */
-    display: none;
 }
 
 
@@ -314,18 +331,12 @@ body {
 
 
 /* =========================================================
-   DESKTOP MUSIC VISUALIZER
+   MUSIC VISUALIZER
    ========================================================= */
 
 .visualizer {
-    position: fixed;
+    width: 100%;
 
-    bottom: 25px;
-    left: 50%;
-
-    transform: translateX(-50%);
-
-    width: min(300px, 65vw);
     height: 35px;
 
     display: flex;
@@ -333,8 +344,6 @@ body {
     justify-content: center;
 
     gap: 3px;
-
-    z-index: 20;
 
     pointer-events: none;
 
@@ -358,52 +367,6 @@ body {
         height 0.06s linear;
 }
 
-
-/* =========================================================
-   MOBILE MUSIC VISUALIZER
-   ========================================================= */
-
-.mobile-visualizer {
-    display: none;
-
-    position: fixed;
-
-    left: 50%;
-    bottom: 18px;
-
-    transform: translateX(-50%);
-
-    width: 65vw;
-    height: 28px;
-
-    align-items: flex-end;
-    justify-content: center;
-
-    gap: 2px;
-
-    z-index: 9999;
-
-    pointer-events: none;
-
-    filter:
-        blur(1px);
-}
-
-.mobile-visualizer span {
-    width: 2px;
-    height: 3px;
-
-    min-height: 3px;
-
-    background: white;
-
-    box-shadow:
-        2px 0 0 rgba(255, 0, 0, 0.20),
-        -2px 0 0 rgba(0, 255, 255, 0.20);
-
-    transition:
-        height 0.06s linear;
-}
 
 /* =========================================================
    CRT FLICKER
@@ -478,23 +441,29 @@ body {
         letter-spacing: 0.04em;
     }
 
-    /* Hide the original visualizer */
-    .visualizer {
-        display: none;
+    .music-area {
+        bottom: 18px;
+
+        width: 65vw;
     }
 
-    /* Show the independent mobile visualizer */
-    .mobile-visualizer {
-        display: flex;
-    }
-
-    /* Prompt directly above mobile visualizer */
     .music-prompt {
-        bottom: 56px;
-
         width: 90vw;
 
         font-size: 12px;
+    }
+
+    .visualizer {
+        height: 28px;
+
+        gap: 2px;
+
+        filter:
+            blur(1px);
+    }
+
+    .visualizer span {
+        width: 2px;
     }
 
     .music-prompt .desktop-text {
@@ -534,7 +503,7 @@ body {
 <body>
 
 <div class="crt">
-    
+
     <div class="scanlines"></div>
 
     <img
@@ -544,7 +513,9 @@ body {
     >
 
 
-    <!-- 404 MESSAGE -->
+    <!-- =====================================================
+         404 MESSAGE
+         ===================================================== -->
 
     <main class="error">
 
@@ -565,12 +536,22 @@ body {
 
     </main>
 
+</div>
+
+
+<!-- =========================================================
+     MUSIC AREA
+     ========================================================= -->
+
+<div class="music-area">
+
     <!-- MUSIC START PROMPT -->
 
     <div
         class="music-prompt"
         id="musicPrompt"
     >
+
         <span class="desktop-text">
             PRESS ANY KEY TO START MUSIC
         </span>
@@ -578,28 +559,18 @@ body {
         <span class="mobile-text">
             PRESS ANYWHERE TO START MUSIC
         </span>
+
     </div>
 
-</div>
 
-
-    <!-- DESKTOP MUSIC VISUALIZER -->
+    <!-- MUSIC VISUALIZER -->
 
     <div
         class="visualizer"
         id="visualizer"
     ></div>
-    
 
-
-<!-- =========================================================
-     MOBILE MUSIC VISUALIZER
-     ========================================================= -->
-
-<div
-    class="mobile-visualizer"
-    id="mobileVisualizer"
-></div>
+</div>
 
 
 <!-- =========================================================
@@ -607,7 +578,12 @@ body {
      ========================================================= -->
 
 <audio id="bgMusic" loop>
-    <source src="404-music.mp3" type="audio/mpeg">
+
+    <source
+        src="404-music.mp3"
+        type="audio/mpeg"
+    >
+
 </audio>
 
 
@@ -619,9 +595,6 @@ const music =
 const visualizer =
     document.getElementById("visualizer");
 
-const mobileVisualizer =
-    document.getElementById("mobileVisualizer");
-
 const musicPrompt =
     document.getElementById("musicPrompt");
 
@@ -629,7 +602,7 @@ music.volume = 0.3;
 
 
 /* =========================================================
-   CREATE DESKTOP VISUALIZER BARS
+   CREATE VISUALIZER BARS
    ========================================================= */
 
 const barCount = 40;
@@ -644,22 +617,6 @@ for (let i = 0; i < barCount; i++) {
 
 const bars =
     visualizer.querySelectorAll("span");
-
-
-/* =========================================================
-   CREATE MOBILE VISUALIZER BARS
-   ========================================================= */
-
-for (let i = 0; i < barCount; i++) {
-
-    const bar =
-        document.createElement("span");
-
-    mobileVisualizer.appendChild(bar);
-}
-
-const mobileBars =
-    mobileVisualizer.querySelectorAll("span");
 
 
 /* =========================================================
@@ -725,11 +682,6 @@ function animateVisualizer() {
         dataArray
     );
 
-
-    /* -----------------------------------------
-       DESKTOP
-       ----------------------------------------- */
-
     bars.forEach((bar, i) => {
 
         const index =
@@ -742,37 +694,19 @@ function animateVisualizer() {
         const value =
             dataArray[index];
 
-        const height =
-            Math.max(
-                3,
-                (value / 255) * 35
-            );
+        /*
+           Read the actual visualizer height.
+           This automatically works for both
+           desktop (35px) and mobile (28px).
+        */
 
-        bar.style.height =
-            `${height}px`;
-    });
-
-
-    /* -----------------------------------------
-       MOBILE
-       ----------------------------------------- */
-
-    mobileBars.forEach((bar, i) => {
-
-        const index =
-            Math.floor(
-                i *
-                dataArray.length /
-                mobileBars.length
-            );
-
-        const value =
-            dataArray[index];
+        const maxHeight =
+            visualizer.clientHeight;
 
         const height =
             Math.max(
                 3,
-                (value / 255) * 28
+                (value / 255) * maxHeight
             );
 
         bar.style.height =
@@ -803,6 +737,7 @@ function startMusic() {
                Music successfully started.
                Immediately remove the prompt.
             */
+
             musicPrompt.classList.remove("visible");
 
         })
@@ -812,6 +747,7 @@ function startMusic() {
                Autoplay was blocked.
                Show the flashing prompt.
             */
+
             musicPrompt.classList.add("visible");
 
         });
