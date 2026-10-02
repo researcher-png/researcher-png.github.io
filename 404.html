@@ -71,9 +71,7 @@ body {
    SCANLINES
    ========================================================= */
 
-.crt::after {
-    content: "";
-
+.scanlines {
     position: absolute;
     inset: 0;
 
@@ -91,9 +89,8 @@ body {
         );
 
     opacity: 0.9;
-    
-    filter:
-        blur(0.3px)
+
+    filter: blur(0.3px);
 }
 
 
@@ -429,8 +426,8 @@ body {
 <body>
 
 <div class="crt">
-
-    <!-- YOUR LOGO -->
+    
+    <div class="scanlines"></div>
 
     <img
         class="logo"
