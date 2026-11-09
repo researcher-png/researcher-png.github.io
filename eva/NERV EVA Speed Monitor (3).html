@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>NERV EVA Speed Monitor</title>
+<style>
+:root{color-scheme:dark;--o:#ff6b00;--o2:#ff9b50;--glow:#ff4500;--ghost:rgba(255,107,0,.09);--bg:#050505;--f1:#35c24a;--f2:#ff6b00;
+--fs:clamp(9px,2.1vh,13px);box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+html,body{height:100%;margin:0}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--o);font-family:"Times New Roman",Times,"Hiragino Mincho ProN","Yu Mincho","MS Mincho","Noto Serif JP",serif;overflow:hidden}
+body.alert{--o:#ff2a1a;--o2:#ff6a5a;--glow:#ff0000;--ghost:rgba(255,42,26,.09);--f1:#ff2a1a;--f2:#ff2a1a}
+.dash{position:relative;height:100%;padding:10px 14px;display:grid;grid-template-columns:27% 1fr 27%;grid-template-rows:auto 1fr auto;
+grid-template-areas:"tl tc tr" "ct ct ct" "bl bc br";gap:6px;background:radial-gradient(ellipse at 0 35%,rgba(53,194,74,.2),transparent 45%),var(--bg)}
+.dash::before{content:"";position:absolute;inset:0;border:4px solid;border-image:linear-gradient(135deg,var(--f1),var(--f2) 40%,var(--f2)) 1;pointer-events:none}
+body.alert .dash::before{animation:fl 1s steps(2) infinite}
+@keyframes fl{50%{opacity:.25}}
+.tl{grid-area:tl}.tc{grid-area:tc;text-align:center}.tr{grid-area:tr;text-align:right}
+.bl{grid-area:bl;align-self:end}.bc{grid-area:bc;align-self:end;text-align:center}.br{grid-area:br;align-self:end;text-align:right}
+.center{grid-area:ct;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:clamp(2px,1vh,8px);min-height:0}
+.lb{font-size:var(--fs);letter-spacing:2px;color:var(--o2);font-weight:bold;line-height:1.3}
+.lb b{color:var(--o)}
+.big{font-size:clamp(11px,2.6vh,18px)}
+.seg{display:inline-flex;align-items:flex-end;gap:calc(var(--h)*.12);filter:drop-shadow(0 0 7px var(--glow))}
+.seg svg{height:var(--h);width:auto;transform:skewX(-9deg)}
+.seg polygon,.seg rect{fill:var(--ghost)}
+.seg .on{fill:var(--o)}
+.seg .d{aspect-ratio:60/108}.seg .c{aspect-ratio:24/108}.seg .p{aspect-ratio:20/108}
+#speed{--h:clamp(60px,min(38vh,26vw),280px)}
+#sync,#energy{--h:clamp(16px,4.6vh,30px)}
+#timer{--h:clamp(20px,6.5vh,40px)}
+#max{--h:clamp(12px,3.2vh,20px)}
+.row{display:flex;align-items:flex-end;gap:6px}.tr .row,.br .row{justify-content:flex-end}
+.row>b{font-size:var(--fs)}
+.bar{height:6px;border:1px solid var(--o);background:#1a1a1a;margin:3px 0}
+.fill{height:100%;background:var(--o)}
+.unit{font-size:clamp(14px,3.6vh,24px);letter-spacing:8px;font-weight:bold;cursor:pointer;user-select:none}
+.gauge{display:grid;grid-template-columns:repeat(40,1fr);gap:2px;width:100%;height:clamp(6px,1.8vh,12px)}
+.gauge i{background:var(--ghost);border:1px solid var(--ghost)}
+.gauge i.on{background:var(--o);border-color:var(--o);box-shadow:0 0 4px var(--glow)}
+.box{display:inline-block;border:2px solid var(--o);padding:3px 8px;background:#0b0b0b;text-align:left}
+.box .t{display:flex;gap:6px;align-items:center;font-weight:bold;font-size:clamp(11px,3vh,20px);letter-spacing:1px}
+.hatch{width:clamp(14px,4vh,26px);height:clamp(12px,3vh,20px);background:repeating-linear-gradient(-60deg,#ff5a5a 0 4px,transparent 4px 8px)}
+.modes{display:flex;gap:4px;justify-content:center;margin-bottom:4px}
+.m{border:1px solid var(--o);padding:1px 7px;font-size:var(--fs);font-weight:bold;letter-spacing:1px;line-height:1.15;text-align:center;opacity:.6}
+.m small{display:block;font-size:.85em;font-weight:normal}
+.m.on{background:var(--o);color:#000;opacity:1;box-shadow:0 0 6px var(--glow)}
+.m.rc.on{background:#ff2a1a;color:#fff}
+.btns{display:flex;gap:5px;justify-content:center}
+button{background:var(--o);color:#000;border:0;font:bold var(--fs) "Times New Roman",serif;letter-spacing:1px;padding:3px 8px;cursor:pointer}
+button.off{background:transparent;color:var(--o);border:1px solid var(--o)}
+.dash.flip{transform:scaleX(-1)}
+.blink{animation:b 1s steps(2) infinite}@keyframes b{50%{opacity:.15}}
+@media (orientation:portrait){body::before{content:"ROTATE DEVICE TO LANDSCAPE / 横向きにしてください";position:fixed;inset:0;background:var(--bg);color:var(--o);z-index:5;display:grid;place-items:center;font-size:22px;letter-spacing:3px;text-align:center;padding:20px}}
+</style>
+</head>
+<body>
+<div class="dash">
+
+<div class="tl">
+  <div class="lb">同調率 SYNC RATE</div>
+  <div class="row"><div class="seg" id="sync"></div><b>%</b></div>
+  <div class="bar"><div class="fill" id="syncBar"></div></div>
+  <div class="lb">機体状態 UNIT STATUS: <b>OPERATIONAL</b></div>
+</div>
+
+<div class="tc">
+  <div class="lb big">特務機関ネルフ // NERV EVA MONITOR</div>
+  <div class="lb">測位 GPS LINK: <b id="gps">STANDBY</b></div>
+  <div class="lb">最高速度 PEAK <span class="seg" id="max"></span></div>
+</div>
+
+<div class="tr">
+  <div class="box"><div class="t"><span class="hatch"></span><span id="pwJp">内部</span><span id="pw">INTERNAL</span></div>
+  <div class="lb">主電源供給システム<br>MAIN ENERGY SUPPLY SYSTEM</div></div>
+</div>
+
+<section class="center">
+  <div class="lb big">現在速度 CURRENT VELOCITY</div>
+  <div class="seg" id="speed"></div>
+  <div class="unit" id="unit" title="Tap to switch units">KM / H</div>
+  <div class="gauge" id="gauge"></div>
+</section>
+
+<div class="bl">
+  <div class="lb">活動限界まで<br>ACTIVE TIME REMAINING:</div>
+  <div class="seg" id="timer"></div>
+</div>
+
+<div class="bc">
+  <div class="modes">
+    <div class="m" id="m0">STOP<small>停止</small></div>
+    <div class="m" id="m1">SLOW<small>低速</small></div>
+    <div class="m" id="m2">NORMAL<small>通常</small></div>
+    <div class="m rc" id="m3">RACING<small>全速</small></div>
+  </div>
+  <div class="btns"><button id="gpsBtn">ENGAGE GPS</button><button id="sim" class="off">SIM</button><button id="reset" class="off">RESET</button><button id="flip" class="off">MIRROR</button></div>
+</div>
+
+<div class="br">
+  <div class="lb">エネルギー残量 ENERGY LEVEL</div>
+  <div class="row"><div class="seg" id="energy"></div><b>%</b></div>
+  <div class="bar"><div class="fill" id="energyBar"></div></div>
+  <div class="lb">警告 WARNING: <b id="warning">NONE</b></div>
+</div>
+
+</div>
+
+<script>
+const SEG={0:'abcdef',1:'bc',2:'abged',3:'abgcd',4:'fgbc',5:'afgcd',6:'afgedc',7:'abc',8:'abcdefg',9:'abcdfg'};
+const P={a:'12,2 48,2 54,8 48,14 12,14 6,8',b:'54,14 60,20 60,42 54,48 48,42 48,20',c:'54,60 60,66 60,88 54,94 48,88 48,66',d:'12,94 48,94 54,100 48,106 12,106 6,100',e:'6,60 12,66 12,88 6,94 0,88 0,66',f:'6,14 12,20 12,42 6,48 0,42 0,20',g:'12,48 48,48 54,54 48,60 12,60 6,54'};
+function glyph(ch){
+  if(ch===':')return '<svg class="c" viewBox="0 0 24 108"><rect class="on" x="6" y="30" width="12" height="12"/><rect class="on" x="6" y="66" width="12" height="12"/></svg>';
+  if(ch==='.')return '<svg class="p" viewBox="0 0 20 108"><rect class="on" x="4" y="94" width="12" height="12"/></svg>';
+  const on=SEG[ch]||'';
+  return '<svg class="d" viewBox="0 0 60 108">'+Object.keys(P).map(k=>'<polygon class="'+(on.includes(k)?'on':'')+'" points="'+P[k]+'"/>').join('')+'</svg>';
+}
+const cache={},$=id=>document.getElementById(id);
+function show(id,t){if(cache[id]===t)return;cache[id]=t;$(id).innerHTML=[...t].map(glyph).join('')}
+const gauge=$('gauge');
+for(let i=0;i<40;i++)gauge.appendChild(document.createElement('i'));
+
+let mph=false,kmh=0,peak=0,tEnd=Date.now()+300000,watchId=null,simOn=false,phase=0,lastFix=0,last=null;
+const MAXK=240,MAXV=()=>mph?150:240,ALERT=0.83;
+const setGps=t=>$('gps').textContent=t;
+
+function render(){
+  const f=mph?0.621371:1,v=Math.round(kmh*f),pk=Math.round(peak*f),r=Math.min(1,v/MAXV());
+  show('speed',String(Math.min(v,999)).padStart(3,' '));
+  show('max',String(Math.min(pk,999)).padStart(3,' '));
+  const sy=(98.7+kmh/100).toFixed(1);
+  show('sync',sy.padStart(5,' '));
+  $('syncBar').style.width=Math.min(100,98.7+kmh/100)+'%';
+  const en=Math.max(0,Math.round(100*(1-kmh/MAXK)));
+  show('energy',String(en).padStart(3,' '));
+  $('energyBar').style.width=en+'%';
+  const lit=Math.round(r*40);
+  [...gauge.children].forEach((c,i)=>c.classList.toggle('on',i<lit));
+  const idx=v===0?0:r<0.25?1:r<0.7?2:3;
+  for(let i=0;i<4;i++)$('m'+i).classList.toggle('on',i===idx);
+  const hot=r>=ALERT;
+  document.body.classList.toggle('alert',hot);
+  $('warning').textContent=hot?'WARNING':'NONE';
+  $('unit').textContent=mph?'M P H':'KM / H';
+}
+function setSpeed(k){kmh=k<1.5?0:k;if(kmh>peak)peak=kmh;render()}
+function drawTimer(){
+  const rem=Math.max(0,tEnd-Date.now());
+  const m=Math.floor(rem/60000),s=String(Math.floor(rem/1000)%60).padStart(2,'0'),cs=String(Math.floor(rem/10)%100).padStart(2,'0');
+  show('timer',m+':'+s+':'+cs);
+  $('timer').classList.toggle('blink',rem===0);
+  $('pw').textContent=rem===0?'DEPLETED':'INTERNAL';
+  $('pwJp').textContent=rem===0?'枯渇':'内部';
+}
+function dist(a,b){const R=6371000,t=x=>x*Math.PI/180,dl=t(b.lat-a.lat),dn=t(b.lon-a.lon);
+  const h=Math.sin(dl/2)**2+Math.cos(t(a.lat))*Math.cos(t(b.lat))*Math.sin(dn/2)**2;return 2*R*Math.asin(Math.sqrt(h))}
+
+function startGPS(){
+  if(!('geolocation' in navigator)){setGps('NO GPS DEVICE');return}
+  setGps('ACQUIRING...');
+  try{
+    watchId=navigator.geolocation.watchPosition(p=>{
+      lastFix=Date.now();
+      let v=p.coords.speed;
+      const cur={lat:p.coords.latitude,lon:p.coords.longitude,t:p.timestamp};
+      if((v===null||isNaN(v))&&last){const dt=(cur.t-last.t)/1000;if(dt>0)v=dist(last,cur)/dt}
+      last=cur;
+      setSpeed((v||0)*3.6);
+      setGps(p.coords.accuracy>50?'WEAK SIGNAL':'LOCKED');
+    },e=>{
+      stopGPS();
+      setGps(e.code===1?'ACCESS DENIED':e.code===2?'NO SIGNAL':'TIMEOUT');
+    },{enableHighAccuracy:true,maximumAge:0,timeout:15000});
+    $('gpsBtn').textContent='DISENGAGE';
+  }catch(e){setGps('BLOCKED HERE')}
+}
+function stopGPS(){
+  if(watchId!==null)navigator.geolocation.clearWatch(watchId);
+  watchId=null;last=null;$('gpsBtn').textContent='ENGAGE GPS';
+}
+$('gpsBtn').onclick=()=>{
+  if(watchId!==null){stopGPS();setGps('STANDBY');setSpeed(0);return}
+  simOn=false;$('sim').classList.add('off');startGPS();
+};
+$('sim').onclick=()=>{
+  simOn=!simOn;$('sim').classList.toggle('off',!simOn);
+  if(simOn){stopGPS();setGps('SIMULATED')}else{setGps('STANDBY');setSpeed(0)}
+};
+$('reset').onclick=()=>{tEnd=Date.now()+300000;peak=kmh;render()};
+$('unit').onclick=()=>{mph=!mph;render()};
+function setFlip(on){document.querySelector('.dash').classList.toggle('flip',on);$('flip').classList.toggle('off',!on);try{localStorage.setItem('evaFlip',on?'1':'0')}catch(e){}}
+$('flip').onclick=()=>setFlip(!document.querySelector('.dash').classList.contains('flip'));
+try{if(localStorage.getItem('evaFlip')==='1')setFlip(true)}catch(e){}
+setInterval(drawTimer,50);
+setInterval(()=>{
+  if(simOn){phase+=0.025;setSpeed((1-Math.cos(phase))/2*MAXK)}
+  else if(watchId!==null&&lastFix&&Date.now()-lastFix>6000){setSpeed(0);setGps('SIGNAL LOST')}
+},50);
+render();drawTimer();
+</script>
+</body>
+</html>
